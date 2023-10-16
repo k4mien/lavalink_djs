@@ -1,0 +1,10 @@
+#git
+.git
+.gitignore
+#docker
+Dockerfile-dev
+docker-compose
+#readme
+README.md
+#node
+node_modules
