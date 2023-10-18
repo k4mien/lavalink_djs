@@ -1,9 +1,9 @@
-const { Collection } = require("discord.js");
+const { MiniMap } = require("lavalink-client");
 const fs = require("fs");
 
 const handleCommands = (client) => {
-  client.commands = new Collection();
-  client.aliases = new Collection();
+  client.commands = new MiniMap();
+  client.aliases = new MiniMap();
 
   const commands = fs
     .readdirSync(`${process.cwd()}/commands/`)
