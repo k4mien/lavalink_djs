@@ -1,6 +1,18 @@
 version: "3.8"
 
 services:
+  discordjs:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./src:/app
+      - /app/node_modules
+    networks:
+      - lavalink
+    container_name: dc-docker
+    command: npm run dev
+
   lavalink:
     image: ghcr.io/lavalink-devs/lavalink:ab6c327 # pin the image version to Lavalink v4
     container_name: lavalink
@@ -13,20 +25,10 @@ services:
     networks:
       - lavalink
     expose:
-      - 2333 # lavalink exposes port 2333 to connect to for other containers (this is for documentation purposes only)
+      - 2333 # lavalink exposes port to connect to for other containers (this is for documentation purposes only)
     ports:
       - 2333:2333 # you only need this if you want to make your lavalink accessible from outside of containers
-  discordjs:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    volumes:
-      - ./src:/app
-      - /app/node_modules
-    networks:
-      - lavalink
-    container_name: dc-docker
-    command: npm run dev
+
 networks:
   lavalink: # create a lavalink network you can add other containers to, to give them access to Lavalink
     name: lavalink
