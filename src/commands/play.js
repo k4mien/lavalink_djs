@@ -3,7 +3,7 @@ const { EmbedBuilder } = require("discord.js");
 module.exports = {
   name: "play",
   aliases: ["p"],
-  options: "[ url | text ]",
+  options: [" <url | text>"],
   description: "Play a song or playlist",
   inVoiceChannel: true,
   run: async (client, message, args) => {
@@ -70,15 +70,12 @@ module.exports = {
         ],
       });
 
-    const response = await player.search(
-      { query: query, source: "ytsearch" },
-      message.user
-    );
+    const response = await player.search({ query: query }, message.user);
 
     if (!response || !response.tracks?.length)
       return interaction.reply({ content: `No Tracks found`, ephemeral: true });
 
-    await player.queue.add(response.tracks);
+    await player.queue.add(response.tracks[0]);
 
     if (!player.playing)
       await player.play(
