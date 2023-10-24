@@ -22,9 +22,9 @@ module.exports = {
     const player = client.lavalink.getPlayer(message.guildId);
 
     if (player?.voiceChannelId != voiceChannelId && player?.connected) {
-      const newPlayer = client.lavalink.updatePlayer();
-      // player.voiceChannelId = voiceChannelId;
-      await newPlayer.connect();
+      player.voiceChannelId = voiceChannelId;
+      player.options.voiceChannelId = voiceChannelId;
+      await player.connect();
       return message.channel.send({
         embeds: [
           new EmbedBuilder().setColor("Purple").setDescription("Joined!"),
@@ -43,11 +43,11 @@ module.exports = {
     }
 
     if (player) {
-      player.voiceChannelId = voiceChannelId;
+      player.voiceChannelId = player.voiceChannelId || voiceChannelId;
       await player.connect();
       return message.channel.send({
         embeds: [
-          new EmbedBuilder().setColor("Purple").setDescription("Joinedd!"),
+          new EmbedBuilder().setColor("Purple").setDescription("Joined!"),
         ],
       });
     } else {
@@ -60,8 +60,8 @@ module.exports = {
         volume: client.defaultVolume, // default volume
         instaUpdateFiltersFix: true, // optional
         applyVolumeAsFilter: false, // if true player.setVolume(54) -> player.filters.setVolume(0.54)
-        // node: "YOUR_NODE_ID",
-        // vcRegion: (interaction.member as GuildMember)?.voice.channel?.rtcRegion!
+        node: "testnode",
+        vcRegion: message.member?.voice.channel?.rtcRegion,
       });
       await newPlayer.connect();
       return message.channel.send({
