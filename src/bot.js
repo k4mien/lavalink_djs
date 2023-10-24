@@ -17,8 +17,9 @@ client.lavalink = new LavalinkManager({
     {
       authorization: process.env.LAVALINK_PASS,
       host: process.env.LAVALINK_NAME,
-      port: 2333,
+      port: parseInt(process.env.LAVALINK_PORT),
       id: "testnode",
+      secure: Boolean(process.env.LAVALINK_SECURE),
     },
   ],
   sendToShard: (guildId, payload) =>
@@ -33,15 +34,15 @@ client.lavalink = new LavalinkManager({
     defaultSearchPlatform: "ytsearch",
     //requesterTransformer: requesterTransformer,
     onDisconnect: {
-      autoReconnect: true,
+      autoReconnect: false,
       destroyPlayer: true,
     },
     onEmptyQueue: {
-      destroyAfterMs: 30_000,
+      destroyAfterMs: 15_000,
     },
   },
   queueOptions: {
-    maxPreviousTracks: 25,
+    maxPreviousTracks: 10,
   },
 });
 
