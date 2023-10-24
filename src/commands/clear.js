@@ -1,15 +1,15 @@
 const { EmbedBuilder } = require("discord.js");
+const play = require("./play");
 
 module.exports = {
-  name: "pause",
-  description: "Pause the queue",
+  name: "clear",
+  description: "Clear the queue",
   options: [],
-  inVoiceChannel: true,
   run: async (client, message) => {
     if (!message.guildId) return;
 
-    const player = client.lavalink.getPlayer(message.guildId);
     const voiceChannelId = message.member?.voice?.channelId;
+    const player = client.lavalink.getPlayer(message.guildId);
 
     if (!voiceChannelId) {
       return message.channel.send({
@@ -30,12 +30,12 @@ module.exports = {
         ],
       });
 
-    if (voiceChannelId !== player.voiceChannelId) {
+    if (player?.voiceChannelId !== voiceChannelId) {
       return message.channel.send({
         embeds: [
           new EmbedBuilder()
             .setColor("Purple")
-            .setDescription("You have to be in the same voice channel as bot!"),
+            .setDescription("You are in the different voice channel"),
         ],
       });
     }
@@ -49,21 +49,13 @@ module.exports = {
         ],
       });
 
-    if (player.paused) {
+    if (player.queue.tracks.length) {
+      await player.queue.splice(0, player.queue.tracks.length);
       return message.channel.send({
         embeds: [
           new EmbedBuilder()
             .setColor("Purple")
-            .setDescription("The song is already paused!"),
-        ],
-      });
-    } else {
-      await player.pause();
-      return message.channel.send({
-        embeds: [
-          new EmbedBuilder()
-            .setColor("Purple")
-            .setDescription("Paused the song for you :)"),
+            .setDescription("Cleared the queue!"),
         ],
       });
     }

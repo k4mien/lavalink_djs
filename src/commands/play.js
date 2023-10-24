@@ -9,34 +9,25 @@ module.exports = {
   run: async (client, message, args) => {
     if (!message.guildId) return;
 
-    const voiceChannel = message.member?.voice?.channel;
     const voiceChannelId = message.member?.voice?.channelId;
+
     if (!voiceChannelId) {
       return message.channel.send({
         embeds: [
           new EmbedBuilder()
-            .setColor("Blue")
+            .setColor("Purple")
             .setDescription("You have to be in a voice channel!"),
         ],
       });
     }
 
-    if (!voiceChannel.joinable || !voiceChannel.speakable) {
-      return message.channel.send({
-        embeds: [
-          new EmbedBuilder()
-            .setColor("Blue")
-            .setDescription("I cannot join this voice channel!"),
-        ],
-      });
-    }
-
     const query = args.join(" ");
+
     if (!query) {
       return message.channel.send({
         embeds: [
           new EmbedBuilder()
-            .setColor("Blue")
+            .setColor("Purple")
             .setDescription("Please enter a song url or query to search."),
         ],
       });
@@ -57,29 +48,52 @@ module.exports = {
         // vcRegion: (interaction.member as GuildMember)?.voice.channel?.rtcRegion!
       }));
 
-    const connected = player.connected;
+    if (!player.connected) await player.connect();
 
-    if (!connected) await player.connect();
-
-    if (player.voiceChannelId !== voiceChannelId)
+    if (player?.voiceChannelId !== voiceChannelId) {
       return message.channel.send({
         embeds: [
           new EmbedBuilder()
-            .setColor("Blue")
-            .setDescription("You have to be in a voice channel with me!"),
+            .setColor("Purple")
+            .setDescription("You are in the different voice channel"),
         ],
       });
+    }
 
     const response = await player.search({ query: query }, message.user);
 
     if (!response || !response.tracks?.length)
-      return interaction.reply({ content: `No Tracks found`, ephemeral: true });
+      return message.channel.send({
+        embeds: [
+          new EmbedBuilder()
+            .setColor("Purple")
+            .setDescription("The result not found!"),
+        ],
+      });
 
-    await player.queue.add(response.tracks[0]);
+    await player.queue.add(
+      response.loadType === "playlist" ? response.tracks : response.tracks[0]
+    );
 
-    if (!player.playing)
-      await player.play(
-        connected ? { volume: client.defaultVolume, paused: false } : undefined
-      );
+    await message.channel.send({
+      embeds: [
+        new EmbedBuilder().setColor("Purple").setDescription(
+          response.loadType === "playlist"
+            ? `Added ${
+                response.playlist?.title
+                  ? ` - from the ${response.pluginInfo.type || "Playlist"} ${
+                      response.playlist.uri
+                        ? `[${response.playlist.title}](<${response.playlist.uri}>)`
+                        : `${response.playlist.title}`
+                    }`
+                  : ""
+              }
+                }\``
+            : `Added [**${response.tracks[0].info.title}**](<${response.tracks[0].info.uri}>)`
+        ),
+      ],
+    });
+
+    if (!player.playing) await player.play();
   },
 };

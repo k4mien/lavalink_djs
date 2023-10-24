@@ -1,9 +1,10 @@
 const { EmbedBuilder } = require("discord.js");
 
 module.exports = {
-  name: "leave",
+  name: "resume",
+  description: "Resume the queue",
   options: [],
-  description: "Leave the channel",
+  inVoiceChannel: true,
   run: async (client, message) => {
     if (!message.guildId) return;
 
@@ -38,6 +39,33 @@ module.exports = {
         ],
       });
     }
-    await player.disconnect();
+
+    if (!player.playing && !player.paused)
+      return message.channel.send({
+        embeds: [
+          new EmbedBuilder()
+            .setColor("Purple")
+            .setDescription("There is nothing in the queue right now!"),
+        ],
+      });
+
+    if (!player.paused) {
+      return message.channel.send({
+        embeds: [
+          new EmbedBuilder()
+            .setColor("Purple")
+            .setDescription("The song is not paused!"),
+        ],
+      });
+    } else {
+      await player.resume();
+      return message.channel.send({
+        embeds: [
+          new EmbedBuilder()
+            .setColor("Purple")
+            .setDescription("Resumed the song for you :)"),
+        ],
+      });
+    }
   },
 };
