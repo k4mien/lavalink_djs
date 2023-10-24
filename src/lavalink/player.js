@@ -1,4 +1,5 @@
 const { EmbedBuilder } = require("discord.js");
+const play = require("../commands/play");
 
 module.exports = async function (client) {
   client.lavalink
@@ -7,17 +8,19 @@ module.exports = async function (client) {
     })
     .on("playerDestroy", (player, reason) => {
       console.log(player.guildId, " :: Player got Destroyed :: ");
-      // const channel = client.channels.cache.get(player.textChannelId);
-      // if (!channel) return console.log("No Channel?", player);
-      // channel.send({
-      //   embeds: [
-      //     new EmbedBuilder()
-      //       .setColor("Red")
-      //       .setTitle("Player Destroyed")
-      //       .setDescription(`Reason: ${reason || "Unknown"}`)
-      //       .setTimestamp(),
-      //   ],
-      // });
+      const channel = client.channels.cache.get(player.textChannelId);
+      if (!channel) return;
+      channel.send({
+        embeds: [
+          new EmbedBuilder()
+            .setColor("Purple")
+            .setDescription(
+              `${reason}` == "QueueEmpty"
+                ? "I left the channel due to inactivity!"
+                : `${reason}`
+            ),
+        ],
+      });
     })
     .on("playerDisconnect", (player, voiceChannelId) => {
       console.log(
@@ -29,10 +32,7 @@ module.exports = async function (client) {
       if (!channel) return;
       channel.send({
         embeds: [
-          new EmbedBuilder()
-            .setColor("Blue")
-            .setDescription("Disconnected!")
-            .setTimestamp(),
+          new EmbedBuilder().setColor("Purple").setDescription("Disconnected!"),
         ],
       });
     })
@@ -58,43 +58,28 @@ module.exports = async function (client) {
    */
   client.lavalink
     .on("trackStart", (player, track) => {
-      console.log(
-        player.guildId,
-        " :: Started Playing :: ",
-        track.info.title,
-        "QUEUE:",
-        player.queue.tracks.map((v) => v.info.title)
-      );
+      // console.log(
+      //   player.guildId,
+      //   " :: Started Playing :: ",
+      //   track.info.title,
+      //   "QUEUE:",
+      //   player.queue.tracks.map((v) => v.info.title)
+      // );
       const channel = client.channels.cache.get(player.textChannelId);
       if (!channel) return;
       channel.send({
         embeds: [
           new EmbedBuilder()
-            .setColor("Blurple")
-            .setTitle(`🎶 ${track.info.title}`.substring(0, 256))
-            .setURL(track.info.uri)
+            .setColor("Purple")
+            .setTitle("Now playing")
+            .setDescription(
+              `[${track.info.title}](${track.info.uri}) - \`[${
+                Date.now() + track.info.duration / 1000
+              }]\``
+            )
             .setThumbnail(
               track.info.artworkUrl || track.pluginInfo?.artworkUrl || null
-            )
-            .setDescription(
-              [
-                `> - **Author:** ${track.info.author}`,
-                `> - **Duration:** ${
-                  track.info.duration
-                } | Ends <t:${Math.floor(
-                  (Date.now() + track.info.duration) / 1000
-                )}:R>`,
-                `> - **Source:** ${track.info.sourceName}`,
-              ]
-                .filter((v) => typeof v === "string" && v.length)
-                .join("\n")
-                .substring(0, 4096)
-            )
-            .setFooter({
-              text: `Requested by ${track.requester.username}`,
-              iconURL: track.requester.avatar || undefined,
-            })
-            .setTimestamp(),
+            ),
         ],
       });
     })
@@ -130,9 +115,8 @@ module.exports = async function (client) {
       channel.send({
         embeds: [
           new EmbedBuilder()
-            .setColor("Red")
-            .setTitle("Queue Ended")
-            .setTimestamp(),
+            .setColor("Purple")
+            .setDescription("The queue has ended!"),
         ],
       });
     })
