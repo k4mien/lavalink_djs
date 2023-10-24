@@ -9,7 +9,7 @@ module.exports = {
     return message.channel.send({
       embeds: [
         new EmbedBuilder()
-          .setColor("Blue")
+          .setColor("Purple")
           .setTitle("Commands")
           .setDescription(
             client.commands
