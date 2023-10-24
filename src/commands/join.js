@@ -7,24 +7,14 @@ module.exports = {
   run: async (client, message) => {
     if (!message.guildId) return;
 
-    const voiceChannel = message.member?.voice?.channel;
     const voiceChannelId = message.member?.voice?.channelId;
 
     if (!voiceChannelId) {
       return message.channel.send({
         embeds: [
           new EmbedBuilder()
-            .setColor("Blue")
+            .setColor("Purple")
             .setDescription("You have to be in a voice channel!"),
-        ],
-      });
-    }
-    if (!voiceChannel.joinable || !voiceChannel.speakable) {
-      return message.channel.send({
-        embeds: [
-          new EmbedBuilder()
-            .setColor("Blue")
-            .setDescription("I cannot join this channel!"),
         ],
       });
     }
@@ -32,27 +22,33 @@ module.exports = {
     const player = client.lavalink.getPlayer(message.guildId);
 
     if (player?.voiceChannelId != voiceChannelId && player?.connected) {
-      await player.connect();
+      const newPlayer = client.lavalink.updatePlayer();
+      // player.voiceChannelId = voiceChannelId;
+      await newPlayer.connect();
       return message.channel.send({
-        embeds: [new EmbedBuilder().setColor("Blue").setDescription("Joined!")],
+        embeds: [
+          new EmbedBuilder().setColor("Purple").setDescription("Joined!"),
+        ],
       });
     }
 
-    if (player?.voiceChannelId && player?.connected) {
+    if (player?.voiceChannelId == voiceChannelId && player?.connected) {
       return message.channel.send({
         embeds: [
           new EmbedBuilder()
-            .setColor("Blue")
+            .setColor("Purple")
             .setDescription("I'm already connected!"),
         ],
       });
     }
 
     if (player) {
-      player.voiceChannelId = player.voiceChannelId || voiceChannelId;
+      player.voiceChannelId = voiceChannelId;
       await player.connect();
       return message.channel.send({
-        embeds: [new EmbedBuilder().setColor("Blue").setDescription("Joined!")],
+        embeds: [
+          new EmbedBuilder().setColor("Purple").setDescription("Joinedd!"),
+        ],
       });
     } else {
       const newPlayer = await client.lavalink.createPlayer({
@@ -69,7 +65,9 @@ module.exports = {
       });
       await newPlayer.connect();
       return message.channel.send({
-        embeds: [new EmbedBuilder().setColor("Blue").setDescription("Joined!")],
+        embeds: [
+          new EmbedBuilder().setColor("Purple").setDescription("Joined!"),
+        ],
       });
     }
   },

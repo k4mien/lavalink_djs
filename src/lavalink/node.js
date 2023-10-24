@@ -1,7 +1,7 @@
 module.exports = async function (client) {
   client.lavalink.nodeManager
     .on("raw", (node, payload) => {
-      // console.log(node.id, " :: RAW :: ", payload); // debug info
+      console.log(node.id, " : RAW :: ", payload); // debug info
     })
     .on("disconnect", (node, reason) => {
       console.log(node.id, " :: DISCONNECT :: ", reason);
