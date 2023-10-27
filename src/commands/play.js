@@ -89,7 +89,7 @@ module.exports = {
                   : ""
               }
                 }\``
-            : `Added [**${response.tracks[0].info.title}**](<${response.tracks[0].info.uri}>)`
+            : `Added [**${response.tracks[0].info.title}**](<${response.tracks[0].info.uri}>) to the queue`
         ),
       ],
     });
