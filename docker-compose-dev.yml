@@ -4,10 +4,16 @@ services:
   discordjs:
     build:
       context: .
+      args:
+        - NODE_ENV=development
       dockerfile: Dockerfile
     volumes:
-      - ./src:/app
-      - /app/node_modules
+      - ./src:/node/app
+      - ./src/package.json:/node/package.json
+      - ./src/package-lock.json:/node/package-lock.json
+      - ndm:/node/app/node_modules
+    environment:
+      - NODE_ENV=development
     networks:
       - lavalink
     container_name: dc-docker
@@ -27,8 +33,11 @@ services:
     expose:
       - 2333 # lavalink exposes port to connect to for other containers (this is for documentation purposes only)
     ports:
-      - 2333:2333 # you only need this if you want to make your lavalink accessible from outside of containers
+      - "2333:2333" # you only need this if you want to make your lavalink accessible from outside of containers
 
 networks:
   lavalink: # create a lavalink network you can add other containers to, to give them access to Lavalink
     name: lavalink
+
+volumes:
+  ndm:
