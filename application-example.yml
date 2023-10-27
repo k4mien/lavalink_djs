@@ -14,10 +14,10 @@ lavalink:
     password: "youshallnotpass"
     sources:
       youtube: true
-      bandcamp: true
+      bandcamp: false
       soundcloud: true
       twitch: true
-      vimeo: true
+      vimeo: false
       http: true
       local: false
     filters: # All filters are enabled by default
