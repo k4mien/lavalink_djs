@@ -38,7 +38,7 @@ client.lavalink = new LavalinkManager({
       destroyPlayer: true,
     },
     onEmptyQueue: {
-      destroyAfterMs: 15_000,
+      destroyAfterMs: 300_000,
     },
   },
   queueOptions: {
