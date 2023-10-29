@@ -2,6 +2,6 @@ const node = require("./node");
 const player = require("./player");
 
 module.exports = async function (client) {
-  node(client);
-  player(client);
+  await node(client);
+  await player(client);
 };
