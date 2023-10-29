@@ -7,6 +7,7 @@ module.exports = {
   run: async (client, message) => {
     if (!message.guildId) return;
 
+    const player = client.lavalink.getPlayer(message.guildId);
     const voiceChannelId = message.member?.voice?.channelId;
 
     if (!voiceChannelId) {
@@ -19,25 +20,22 @@ module.exports = {
       });
     }
 
-    const player = client.lavalink.getPlayer(message.guildId);
-
-    if (player?.voiceChannelId != voiceChannelId && player?.connected) {
-      player.voiceChannelId = voiceChannelId;
-      player.options.voiceChannelId = voiceChannelId;
-      await player.connect();
-      return message.channel.send({
-        embeds: [
-          new EmbedBuilder().setColor("Purple").setDescription("Joined!"),
-        ],
-      });
-    }
-
-    if (player?.voiceChannelId == voiceChannelId && player?.connected) {
+    if (player?.voiceChannelId === voiceChannelId && player?.connected) {
       return message.channel.send({
         embeds: [
           new EmbedBuilder()
             .setColor("Purple")
             .setDescription("I'm already connected!"),
+        ],
+      });
+    }
+
+    if (player?.voiceChannelId !== voiceChannelId && player?.connected) {
+      player.options.voiceChannelId = voiceChannelId;
+      await player.connect();
+      return message.channel.send({
+        embeds: [
+          new EmbedBuilder().setColor("Purple").setDescription("Joined!"),
         ],
       });
     }
@@ -57,11 +55,9 @@ module.exports = {
         textChannelId: message.channelId,
         selfDeaf: true,
         selfMute: false,
-        volume: client.defaultVolume, // default volume
-        instaUpdateFiltersFix: true, // optional
-        applyVolumeAsFilter: false, // if true player.setVolume(54) -> player.filters.setVolume(0.54)
-        node: "testnode",
-        vcRegion: message.member?.voice.channel?.rtcRegion,
+        volume: client.defaultVolume,
+        instaUpdateFiltersFix: true,
+        applyVolumeAsFilter: false,
       });
       await newPlayer.connect();
       return message.channel.send({
