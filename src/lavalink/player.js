@@ -1,4 +1,4 @@
-const { EmbedBuilder } = require("discord.js");
+const { EmbedBuilder, lazy} = require("discord.js");
 const formatMS_HHMMSS = require("../utils/time")
 
 module.exports = async function (client) {
@@ -76,7 +76,7 @@ module.exports = async function (client) {
               `[${track.info.title}](${track.info.uri}) - \`[${formatMS_HHMMSS(track.info.duration)}]\``
             )
             .setThumbnail(
-              track.info.artworkUrl || track.pluginInfo?.artworkUrl || null
+              track.info.artworkUrl || track.pluginInfo?.artistArtworkUrl || null
             ),
         ],
       });
