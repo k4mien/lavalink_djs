@@ -63,7 +63,7 @@ module.exports = {
         embeds: [
           new EmbedBuilder()
             .setColor("Purple")
-            .setDescription("Resumed the song for you :)"),
+            .setDescription("Resumed the song for you!"),
         ],
       });
     }
