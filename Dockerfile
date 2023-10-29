@@ -14,9 +14,9 @@ RUN npm i npm@latest -g
 USER node
 
 WORKDIR /node
-
 COPY --chown=node:node src/package.json src/package-lock.json ./
 RUN npm ci && npm cache clean --force
+
 ENV PATH /node/node_modules/.bin:$PATH
 
 WORKDIR /node/app
