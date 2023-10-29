@@ -1,4 +1,5 @@
 const { EmbedBuilder } = require("discord.js");
+const formatMS_HHMMSS = require("../utils/time")
 
 module.exports = {
     name: "forward",
@@ -50,6 +51,16 @@ module.exports = {
                 ],
             });
 
+        if(player.paused){
+            return message.channel.send({
+                embeds: [
+                    new EmbedBuilder()
+                        .setColor("Purple")
+                        .setDescription("The current song is paused! Resume the song to forward it!"),
+                ],
+            });
+        }
+
         if(!args[0]){
             return message.channel.send({
                 embeds: [
@@ -60,16 +71,26 @@ module.exports = {
             });
         }
 
-        const time = Number(args[0]);
+        const time = Number(args[0])*1000;
 
-        if (isNaN(time) || time <= 0)
+        if (isNaN(time))
             return message.channel.send({
                 embeds: [
                     new EmbedBuilder()
-                        .setColor("Blue")
+                        .setColor("Purple")
                         .setDescription("Please enter a valid number!"),
                 ],
             });
 
+        if(player.playing && !player.paused){
+            await player.seek(player.position+time)
+            return message.channel.send({
+                embeds: [
+                    new EmbedBuilder()
+                        .setColor("Purple")
+                        .setDescription(`Forwarded the song to: \`[${formatMS_HHMMSS(player.position)} / ${formatMS_HHMMSS(player.queue.current.info.duration)}]\``),
+                ],
+            });
+        }
     },
 };
