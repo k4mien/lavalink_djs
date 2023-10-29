@@ -11,7 +11,7 @@ const formatMS_HHMMSS = (num) => {
                 : [
                     i === 4 ? "." : "",
                     v < 10 ? `0${v}` : v,
-                    [" Days, ", ":", ":", "", ""][i]
+                    [" days, ", ":", ":", "", ""][i]
                 ].join("")
         )
         .filter(Boolean)
