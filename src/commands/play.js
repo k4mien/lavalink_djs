@@ -79,17 +79,8 @@ module.exports = {
       embeds: [
         new EmbedBuilder().setColor("Purple").setDescription(
           response.loadType === "playlist"
-            ? `Added ${
-                response.playlist?.title
-                  ? ` - from the ${response.pluginInfo.type || "Playlist"} ${
-                      response.playlist.uri
-                        ? `[${response.playlist.title}](<${response.playlist.uri}>)`
-                        : `${response.playlist.title}`
-                    }`
-                  : ""
-              }
-                }\``
-            : `Added [**${response.tracks[0].info.title}**](<${response.tracks[0].info.uri}>) to the queue`
+            ? `Added [**${response.playlist.title}**](${response.playlist.uri ? response.playlist.uri : args[0]}) - \`[${response.tracks.length} tracks]\` to the queue`
+            : `Added [**${response.tracks[0].info.title}**](${response.tracks[0].info.uri}) to the queue`
         ),
       ],
     });
