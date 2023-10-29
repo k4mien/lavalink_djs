@@ -1,4 +1,4 @@
-export function formatMS_HHMMSS(num) {
+const formatMS_HHMMSS = (num) => {
     return [86400000, 3600000, 60000, 1000, 1]
         .reduce((p, c) => {
             let res = ~~(num / c)
@@ -19,4 +19,4 @@ export function formatMS_HHMMSS(num) {
         .join("")
 }
 
-export const delay = async ms => new Promise(r => setTimeout(() => r(true), ms))
+module.exports = formatMS_HHMMSS;
