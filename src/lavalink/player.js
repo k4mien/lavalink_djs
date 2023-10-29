@@ -1,5 +1,5 @@
 const { EmbedBuilder } = require("discord.js");
-const play = require("../commands/play");
+const formatMS_HHMMSS = require("../utils/time")
 
 module.exports = async function (client) {
   client.lavalink
@@ -15,7 +15,7 @@ module.exports = async function (client) {
           new EmbedBuilder()
             .setColor("Purple")
             .setDescription(
-              `${reason}` == "QueueEmpty"
+              `${reason}` === "QueueEmpty"
                 ? "I left the channel due to inactivity!"
                 : `${reason}`
             ),
@@ -28,7 +28,7 @@ module.exports = async function (client) {
         " :: Player disconnected the Voice Channel :: ",
         voiceChannelId
       );
-      const channel = client.channels.cache.get(player.textChannelId);
+      const channel = client.channels.cache .get(player.textChannelId);
       if (!channel) return;
       channel.send({
         embeds: [
@@ -73,9 +73,7 @@ module.exports = async function (client) {
             .setColor("Purple")
             .setTitle("Now playing")
             .setDescription(
-              `[${track.info.title}](${track.info.uri}) - \`[${
-                Date.now() + track.info.duration / 1000
-              }]\``
+              `[${track.info.title}](${track.info.uri}) - \`[${formatMS_HHMMSS(track.info.duration)}]\``
             )
             .setThumbnail(
               track.info.artworkUrl || track.pluginInfo?.artworkUrl || null
