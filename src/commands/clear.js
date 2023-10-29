@@ -1,5 +1,4 @@
 const { EmbedBuilder } = require("discord.js");
-const play = require("./play");
 
 module.exports = {
   name: "clear",
