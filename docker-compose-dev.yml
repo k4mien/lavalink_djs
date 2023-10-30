@@ -24,7 +24,7 @@ services:
     container_name: lavalink
     restart: unless-stopped
     environment:
-      - _JAVA_OPTIONS=-Xmx1G # set Java options here
+      - _JAVA_OPTIONS=-Xmx4G # set Java options here
     volumes:
       - ./application.yml:/opt/Lavalink/application.yml # mount application.yml from the same directory or use environment variables
 #      - ./plugins/:/opt/Lavalink/plugins/ # persist plugins between restarts, make sure to set the correct permissions (user: 322, group: 322)
