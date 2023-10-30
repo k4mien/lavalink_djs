@@ -71,7 +71,7 @@ module.exports = async function (client) {
         embeds: [
           new EmbedBuilder()
             .setColor("Purple")
-            .setTitle("Now playing")
+            .setTitle("🎶 Now playing")
             .setDescription(
               `[${track.info.title}](${track.info.uri}) - \`[${formatMS_HHMMSS(track.info.duration)}]\``
             )
