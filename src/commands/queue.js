@@ -143,7 +143,7 @@ module.exports = {
 
 function embedGenerator(player) {
     const embeds = [];
-    let songs = 16;
+    let songs = 15;
     for (let i = 0; i <= player.queue.tracks.length; i += 15) {
         const current = player.queue.tracks.slice(i, songs);
         songs += 15;
