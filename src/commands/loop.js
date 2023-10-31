@@ -1,4 +1,4 @@
-const { EmbedBuilder } = require("discord.js");
+const {EmbedBuilder} = require("discord.js");
 
 module.exports = {
     name: "loop",
@@ -50,52 +50,52 @@ module.exports = {
                 ],
             });
 
-       if(!args[0]){
-           return message.channel.send({
-               embeds: [
-                   new EmbedBuilder()
-                       .setColor("Purple")
-                       .setDescription(`The repeat mode is set to: \`${player.repeatMode}\``),
-               ],
-           });
-       }
+        if (!args[0]) {
+            return message.channel.send({
+                embeds: [
+                    new EmbedBuilder()
+                        .setColor("Purple")
+                        .setDescription(`The repeat mode is set to: \`${player.repeatMode}\``),
+                ],
+            });
+        }
 
-       switch (args[0]){
-           case 'off':
-               await player.setRepeatMode(args[0]);
-               return message.channel.send({
-                   embeds: [
-                       new EmbedBuilder()
-                           .setColor("Purple")
-                           .setDescription(`Repeat mode disabled!`),
-                   ],
-               })
-           case 'track':
-               await player.setRepeatMode(args[0]);
-               return message.channel.send({
-                   embeds: [
-                       new EmbedBuilder()
-                           .setColor("Purple")
-                           .setDescription(`Repeat mode \`track\` enabled!`),
-                   ],
-               })
-           case 'queue':
-               await player.setRepeatMode(args[0]);
-               return message.channel.send({
-                   embeds: [
-                       new EmbedBuilder()
-                           .setColor("Purple")
-                           .setDescription(`Repeat mode \`queue\` enabled!`)
-                   ],
-               })
-           default:
-               return message.channel.send({
-                   embeds: [
-                       new EmbedBuilder()
-                           .setColor("Purple")
-                           .setDescription(`Please enter correct repeat mode: \`off\`, \`track\`, \`queue\``),
-                   ],
-               })
-       }
+        switch (args[0]) {
+            case 'off':
+                await player.setRepeatMode(args[0]);
+                return message.channel.send({
+                    embeds: [
+                        new EmbedBuilder()
+                            .setColor("Purple")
+                            .setDescription(`🔀 Repeat mode disabled!`),
+                    ],
+                })
+            case 'track':
+                await player.setRepeatMode(args[0]);
+                return message.channel.send({
+                    embeds: [
+                        new EmbedBuilder()
+                            .setColor("Purple")
+                            .setDescription(`🔁 Repeat mode \`track\` enabled!`),
+                    ],
+                })
+            case 'queue':
+                await player.setRepeatMode(args[0]);
+                return message.channel.send({
+                    embeds: [
+                        new EmbedBuilder()
+                            .setColor("Purple")
+                            .setDescription(`🔂 Repeat mode \`queue\` enabled!`)
+                    ],
+                })
+            default:
+                return message.channel.send({
+                    embeds: [
+                        new EmbedBuilder()
+                            .setColor("Purple")
+                            .setDescription(`Please enter correct repeat mode: \`off\`, \`track\`, \`queue\``),
+                    ],
+                })
+        }
     },
 };
