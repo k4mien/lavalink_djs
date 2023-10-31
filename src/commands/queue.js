@@ -79,7 +79,7 @@ module.exports = {
         );
 
         const queueEmbed = await message.channel.send({
-            embeds: [embeds[currentPage]],
+            embeds: [embeds[currentPage].setFooter({text: `Page: ${currentPage + 1}/${embeds.length}`})],
             components: [buttonRow],
         });
 
@@ -98,13 +98,13 @@ module.exports = {
                     if (currentPage === embeds.length - 1) {
                         nextButton.setDisabled(true);
                         interaction.update({
-                            embeds: [embeds[currentPage]],
+                            embeds: [embeds[currentPage].setFooter({text: `Page: ${currentPage + 1}/${embeds.length}`})],
                             components: [buttonRow],
                         });
                     } else {
                         previousButton.setDisabled(false);
                         interaction.update({
-                            embeds: [embeds[currentPage]],
+                            embeds: [embeds[currentPage].setFooter({text: `Page: ${currentPage + 1}/${embeds.length}`})],
                             components: [buttonRow],
                         });
                     }
@@ -115,13 +115,13 @@ module.exports = {
                     if (currentPage === 0) {
                         previousButton.setDisabled(true);
                         interaction.update({
-                            embeds: [embeds[currentPage]],
+                            embeds: [embeds[currentPage].setFooter({text: `Page: ${currentPage + 1}/${embeds.length}`})],
                             components: [buttonRow],
                         });
                     } else {
                         nextButton.setDisabled(false);
                         interaction.update({
-                            embeds: [embeds[currentPage]],
+                            embeds: [embeds[currentPage].setFooter({text: `Page: ${currentPage + 1}/${embeds.length}`})],
                             components: [buttonRow],
                         });
                     }
@@ -162,7 +162,7 @@ function embedGenerator(player) {
             .setDescription(
                 `**Now Playing:** [${player.queue.current.info.title}](${player.queue.current.info.uri}) - \`[${formatMS_HHMMSS(player
                     .queue.current.info.duration)}]\`\n\n${info}`
-            );
+            )
         embeds.push(msg);
     }
     return embeds;
