@@ -85,10 +85,10 @@ module.exports = {
         if (!player.queue.tracks.length) {
             await player.play({ encodedTrack: null });
         } else {
-            await player.skip(position);
+            await player.skip(position-1);
             return message.channel.send({
                 embeds: [
-                    new EmbedBuilder().setColor("Purple").setDescription(`Song skipped to \`${position}\` position!`),
+                    new EmbedBuilder().setColor("Purple").setDescription(`⏩ Song skipped to \`[#${position}]\` position!`),
                 ],
             });
         }
