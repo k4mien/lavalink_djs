@@ -56,7 +56,7 @@ module.exports = {
       await player.skip();
       return message.channel.send({
         embeds: [
-          new EmbedBuilder().setColor("Purple").setDescription("Song skipped!"),
+          new EmbedBuilder().setColor("Purple").setDescription("⏩ Song skipped!"),
         ],
       });
     }
