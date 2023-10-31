@@ -88,7 +88,7 @@ module.exports = {
                 embeds: [
                     new EmbedBuilder()
                         .setColor("Purple")
-                        .setDescription(`Forwarded the song to: \`[${formatMS_HHMMSS(player.position)} / ${formatMS_HHMMSS(player.queue.current.info.duration)}]\``),
+                        .setDescription(`⏩ Forwarded the song to: \`[${formatMS_HHMMSS(player.position)} / ${formatMS_HHMMSS(player.queue.current.info.duration)}]\``),
                 ],
             });
         }
