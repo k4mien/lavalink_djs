@@ -1,4 +1,4 @@
-const {EmbedBuilder, lazy} = require("discord.js");
+const {EmbedBuilder} = require("discord.js");
 const formatMS_HHMMSS = require("../utils/time")
 
 module.exports = async function (client) {
