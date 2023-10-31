@@ -153,7 +153,7 @@ function embedGenerator(player) {
                 (v) =>
                     `${++j}.[ ${v.info.title}](${v.info.uri}) - \`[${
                         formatMS_HHMMSS(v.info.duration)
-                    }]`
+                    }]\``
             )
             .join("\n");
         const msg = new EmbedBuilder()
