@@ -10,7 +10,7 @@ module.exports = {
       embeds: [
         new EmbedBuilder()
           .setColor("Purple")
-          .setTitle("📃\tCommands")
+          .setTitle("📃 Commands")
           .setDescription(
             client.commands
               .map(
