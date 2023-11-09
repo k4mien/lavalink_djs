@@ -43,7 +43,7 @@ module.exports = {
                 embeds: [
                     new EmbedBuilder()
                         .setColor("Purple")
-                        .setDescription("You are in the different voice channel"),
+                        .setDescription("You are in the different voice channel!"),
                 ],
             });
         }
@@ -151,17 +151,23 @@ function embedGenerator(player) {
         const info = current
             .map(
                 (v) =>
-                    `${++j}.[ ${v.info.title}](${v.info.uri}) - \`[${
-                        formatMS_HHMMSS(v.info.duration)
-                    }]\``
+                    v.info.sourceName === "youtube" ? `${++j}.[ ${v.info.title}](${v.info.uri}) - \`[${
+                            formatMS_HHMMSS(v.info.duration)
+                        }]\``
+                        : `${++j}.[ ${v.info.author} - ${v.info.title}](${v.info.uri}) - \`[${
+                            formatMS_HHMMSS(v.info.duration)
+                        }]\``
             )
             .join("\n");
         const msg = new EmbedBuilder()
             .setTitle("🎵 Queue\n\n")
             .setColor("Purple")
             .setDescription(
-                `**Now Playing:** [${player.queue.current.info.title}](${player.queue.current.info.uri}) - \`[${formatMS_HHMMSS(player
-                    .queue.current.info.duration)}]\`\n\n${info}`
+                player.queue.current.info.sourceName === "youtube"
+                    ? `**Now Playing:** [${player.queue.current.info.title}](${player.queue.current.info.uri}) - \`[${formatMS_HHMMSS(player
+                        .queue.current.info.duration)}]\`\n\n${info}`
+                    : `**Now Playing:** [${player.queue.current.info.author} - ${player.queue.current.info.title}](${player.queue.current.info.uri}) - \`[${formatMS_HHMMSS(player
+                        .queue.current.info.duration)}]\`\n\n${info}`
             )
         embeds.push(msg);
     }
