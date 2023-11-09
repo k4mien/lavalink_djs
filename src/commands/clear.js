@@ -34,12 +34,12 @@ module.exports = {
                 embeds: [
                     new EmbedBuilder()
                         .setColor("Purple")
-                        .setDescription("You are in the different voice channel"),
+                        .setDescription("You are in the different voice channel!"),
                 ],
             });
         }
 
-        if ((!player.playing && !player.paused) || !player.queue.current)
+        if ((!player.playing && !player.paused) || !player.queue.current || !player.queue.tracks.length)
             return message.channel.send({
                 embeds: [
                     new EmbedBuilder()
