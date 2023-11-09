@@ -4,7 +4,7 @@
 #RUN npm install -y
 #COPY src ./
 
-FROM node:20.8.0 as dev
+FROM node:21-alpine as dev
 
 ARG NODE_ENV=development
 ENV NODE_ENV $NODE_ENV
