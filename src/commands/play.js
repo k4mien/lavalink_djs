@@ -103,8 +103,12 @@ module.exports = {
             embeds: [
                 new EmbedBuilder().setColor(color).setDescription(
                     response.loadType === "playlist"
-                        ? `Added [**${response.playlist.title}**](${response.playlist.uri ? response.playlist.uri : args[0]}) **(${response.tracks.length} tracks)** to the queue`
-                        : `Added [**${response.tracks[0].info.title}**](${response.tracks[0].info.uri}) to the queue`
+                        ? response.playlist.sourceName === "youtube"
+                            ? `Added [**${response.playlist.title}**](${response.playlist.uri ? response.playlist.uri : args[0]}) **(${response.tracks.length} tracks)** to the queue`
+                            : `Added [**${response.playlist.author} - ${response.playlist.title}**](${response.playlist.uri ? response.playlist.uri : args[0]}) **(${response.tracks.length} tracks)** to the queue`
+                        : response.tracks[0].info.sourceName === "youtube"
+                            ? `Added [**${response.tracks[0].info.title}**](${response.tracks[0].info.uri}) to the queue`
+                            : `Added [**${response.tracks[0].info.author} - ${response.tracks[0].info.title}**](${response.tracks[0].info.uri}) to the queue`
                 ).setFooter({
                     text: source.charAt(0).toUpperCase() + source.slice(1),
                     iconURL: icon
