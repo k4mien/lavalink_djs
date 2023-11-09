@@ -1,4 +1,4 @@
-const { EmbedBuilder } = require("discord.js");
+const {EmbedBuilder} = require("discord.js");
 
 module.exports = {
     name: "remove",
@@ -50,7 +50,7 @@ module.exports = {
                 ],
             });
 
-        if(!args[0]){
+        if (!args[0]) {
             return message.channel.send({
                 embeds: [
                     new EmbedBuilder()
@@ -62,7 +62,7 @@ module.exports = {
 
         const position = Number(args[0]);
 
-        if(isNaN(position)){
+        if (isNaN(position)) {
             return message.channel.send({
                 embeds: [
                     new EmbedBuilder()
@@ -72,7 +72,7 @@ module.exports = {
             });
         }
 
-        if(!(position > 0 && position <= player.queue.tracks.length)){
+        if (!(position > 0 && position <= player.queue.tracks.length)) {
             return message.channel.send({
                 embeds: [
                     new EmbedBuilder()
@@ -90,6 +90,6 @@ module.exports = {
             ],
         });
 
-        await player.queue.splice(position-1, 1)
+        await player.queue.splice(position - 1, 1)
     },
 };
