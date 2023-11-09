@@ -86,7 +86,10 @@ module.exports = {
             embeds: [
                 new EmbedBuilder()
                     .setColor("Purple")
-                    .setDescription(`\`[#${position}]\` [**${player.queue.tracks[position-1].info.title}**](${player.queue.tracks[position-1].info.uri}) removed from the queue!`),
+                    .setDescription(player.queue.tracks[position - 1].info.sourceName === "youtube"
+                        ? `:x: [**${player.queue.tracks[position - 1].info.title}**](${player.queue.tracks[position - 1].info.uri}) removed from the queue!`
+                        : `:x: [**${player.queue.tracks[position - 1].info.author} - ${player.queue.tracks[position - 1].info.title}**](${player.queue.tracks[position - 1].info.uri}) removed from the queue!`
+                    ),
             ],
         });
 
