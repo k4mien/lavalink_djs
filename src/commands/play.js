@@ -29,7 +29,7 @@ module.exports = {
                 embeds: [
                     new EmbedBuilder()
                         .setColor("Purple")
-                        .setDescription("Please enter a song url or query to search."),
+                        .setDescription("Please enter a song url or query to search!"),
                 ],
             });
         }
@@ -56,7 +56,7 @@ module.exports = {
                 embeds: [
                     new EmbedBuilder()
                         .setColor("Purple")
-                        .setDescription("You are in the different voice channel"),
+                        .setDescription("You are in the different voice channel!"),
                 ],
             });
         }
@@ -97,12 +97,7 @@ module.exports = {
                 color = "#6441a5"
                 icon = "https://cdn2.iconfinder.com/data/icons/social-micon/512/twitch-256.png"
                 break;
-            case "bandcamp":
-                color = "#2596be"
-                icon = "https://cdn4.iconfinder.com/data/icons/social-flat-rounded-rects/512/bandcamp_v3-256.png"
-                break;
         }
-
 
         await message.channel.send({
             embeds: [
