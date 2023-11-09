@@ -1,26 +1,33 @@
 const {EmbedBuilder} = require("discord.js");
 const formatMS_HHMMSS = require("../utils/time")
+let songMsg = {}
 
 module.exports = async function (client) {
     client.lavalink
         .on("playerCreate", (player) => {
             console.log(player.guildId, " :: Created a Player :: ");
         })
-        .on("playerDestroy", (player, reason) => {
+        .on("playerDestroy", async (player, reason) => {
             console.log(player.guildId, " :: Player got Destroyed :: ");
             const channel = client.channels.cache.get(player.textChannelId);
             if (!channel) return;
+
             channel.send({
                 embeds: [
                     new EmbedBuilder()
                         .setColor("Purple")
                         .setDescription(
                             `${reason}` === "QueueEmpty"
-                                ? "I left the channel due to inactivity!"
-                                : `${reason}`
+                                ? ":wheelchair: I left the channel due to inactivity!"
+                                : `${reason}!`
                         ),
                 ],
             });
+            if (songMsg[channel.id]) {
+                let oldMsg = await channel.messages.fetch(songMsg[channel.id])
+                await oldMsg.delete();
+            }
+            songMsg = {}
         })
         .on("playerDisconnect", (player, voiceChannelId) => {
             console.log(
@@ -57,7 +64,7 @@ module.exports = async function (client) {
      * Queue/Track Events
      */
     client.lavalink
-        .on("trackStart", (player, track) => {
+        .on("trackStart", async (player, track) => {
             // console.log(
             //   player.guildId,
             //   " :: Started Playing :: ",
@@ -67,19 +74,26 @@ module.exports = async function (client) {
             // );
             const channel = client.channels.cache.get(player.textChannelId);
             if (!channel) return;
-            channel.send({
+
+            if (songMsg[channel.id]) {
+                let oldMsg = await channel.messages.fetch(songMsg[channel.id])
+                await oldMsg.delete();
+            }
+
+            let msg = await channel?.send({
                 embeds: [
                     new EmbedBuilder()
                         .setColor("Purple")
                         .setTitle("🎶 Now playing")
                         .setDescription(
-                            `[${track.info.title}](${track.info.uri}) - \`[${formatMS_HHMMSS(track.info.duration)}]\``
+                            track.info.sourceName === "youtube" ? `[**${track.info.title}**](${track.info.uri}) - \`[${formatMS_HHMMSS(track.info.duration)}]\`` : `[**${track.info.author} - ${track.info.title}**](${track.info.uri}) - \`[${formatMS_HHMMSS(track.info.duration)}]\``
                         )
                         .setThumbnail(
-                            track.info.artworkUrl || track.pluginInfo?.artistArtworkUrl || null
+                            track.info.sourceName === "spotify" ? track.info.artworkUrl.replace("ab67616d0000b273", "ab67616d00004851") : track.info.sourceName === "soundcloud" ? track.info.artworkUrl.replace("-original", "-t60x60") : (track.info.artworkUrl || track.pluginInfo?.artistArtworkUrl || null)
                         ),
-                ],
-            });
+                ]
+            })
+            songMsg[channel.id] = msg.id
         })
         .on("trackEnd", (player, track, payload) => {
             console.log(player.guildId, " :: Finished Playing :: ", track.info.title);
@@ -110,11 +124,12 @@ module.exports = async function (client) {
             );
             const channel = client.channels.cache.get(player.textChannelId);
             if (!channel) return;
+
             channel.send({
                 embeds: [
                     new EmbedBuilder()
                         .setColor("Purple")
-                        .setDescription("The queue has ended!"),
+                        .setDescription(":ballot_box_with_check: The queue has ended!"),
                 ],
             });
         })
