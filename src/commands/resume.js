@@ -35,7 +35,7 @@ module.exports = {
                 embeds: [
                     new EmbedBuilder()
                         .setColor("Purple")
-                        .setDescription("You have to be in the same voice channel as bot!"),
+                        .setDescription("You are in the different voice channel!"),
                 ],
             });
         }
@@ -63,7 +63,7 @@ module.exports = {
                 embeds: [
                     new EmbedBuilder()
                         .setColor("Purple")
-                        .setDescription(`▶️ Resumed the song for you!`),
+                        .setDescription(`:play_pause: Resumed the song for you!`),
                 ],
             });
         }
