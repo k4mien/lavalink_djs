@@ -36,7 +36,7 @@ module.exports = {
                 embeds: [
                     new EmbedBuilder()
                         .setColor("Purple")
-                        .setDescription("You are in the different voice channel"),
+                        .setDescription("You are in the different voice channel!"),
                 ],
             });
         }
@@ -67,7 +67,7 @@ module.exports = {
                     embeds: [
                         new EmbedBuilder()
                             .setColor("Purple")
-                            .setDescription(`🔀 Repeat mode disabled!`),
+                            .setDescription(`:twisted_rightwards_arrows: Repeat mode disabled!`),
                     ],
                 })
             case 'track':
@@ -76,7 +76,7 @@ module.exports = {
                     embeds: [
                         new EmbedBuilder()
                             .setColor("Purple")
-                            .setDescription(`🔁 Repeat mode \`track\` enabled!`),
+                            .setDescription(`:repeat: Repeat mode \`track\` enabled!`),
                     ],
                 })
             case 'queue':
@@ -85,7 +85,7 @@ module.exports = {
                     embeds: [
                         new EmbedBuilder()
                             .setColor("Purple")
-                            .setDescription(`🔂 Repeat mode \`queue\` enabled!`)
+                            .setDescription(`:repeat_one: Repeat mode \`queue\` enabled!`)
                     ],
                 })
             default:
