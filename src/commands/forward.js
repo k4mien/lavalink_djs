@@ -1,4 +1,4 @@
-const { EmbedBuilder } = require("discord.js");
+const {EmbedBuilder} = require("discord.js");
 const formatMS_HHMMSS = require("../utils/time")
 
 module.exports = {
@@ -37,7 +37,7 @@ module.exports = {
                 embeds: [
                     new EmbedBuilder()
                         .setColor("Purple")
-                        .setDescription("You are in the different voice channel"),
+                        .setDescription("You are in the different voice channel!"),
                 ],
             });
         }
@@ -51,17 +51,17 @@ module.exports = {
                 ],
             });
 
-        if(player.paused){
+        if (player.paused) {
             return message.channel.send({
                 embeds: [
                     new EmbedBuilder()
                         .setColor("Purple")
-                        .setDescription("The current song is paused! Resume the song to forward it!"),
+                        .setDescription("The current song is paused! Resume to forward it!"),
                 ],
             });
         }
 
-        if(!args[0]){
+        if (!args[0]) {
             return message.channel.send({
                 embeds: [
                     new EmbedBuilder()
@@ -71,7 +71,7 @@ module.exports = {
             });
         }
 
-        const time = Number(args[0])*1000;
+        const time = Number(args[0]) * 1000;
 
         if (isNaN(time))
             return message.channel.send({
@@ -82,13 +82,13 @@ module.exports = {
                 ],
             });
 
-        if(player.playing && !player.paused){
-            await player.seek(player.position+time)
+        if (player.playing && !player.paused) {
+            await player.seek(player.position + time)
             return message.channel.send({
                 embeds: [
                     new EmbedBuilder()
                         .setColor("Purple")
-                        .setDescription(`⏩ Forwarded the song to: \`[${formatMS_HHMMSS(player.position)} / ${formatMS_HHMMSS(player.queue.current.info.duration)}]\``),
+                        .setDescription(`:fast_forward: Forwarded the song to: \`[${formatMS_HHMMSS(player.position)} / ${formatMS_HHMMSS(player.queue.current.info.duration)}]\``),
                 ],
             });
         }
