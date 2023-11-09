@@ -36,7 +36,7 @@ module.exports = {
                 embeds: [
                     new EmbedBuilder()
                         .setColor("Purple")
-                        .setDescription("You are in the different voice channel"),
+                        .setDescription("You are in the different voice channel!"),
                 ],
             });
         }
@@ -87,7 +87,7 @@ module.exports = {
         } else {
             await message.channel.send({
                 embeds: [
-                    new EmbedBuilder().setColor("Purple").setDescription(`⏩ Song skipped to \`[#${position}]\` position!`),
+                    new EmbedBuilder().setColor("Purple").setDescription(`:track_next: Song skipped to \`[#${position}]\` position!`),
                 ],
             });
             await player.skip(position);
