@@ -18,6 +18,7 @@ client.lavalink = new LavalinkManager({
             authorization: process.env.LAVALINK_PASS,
             host: process.env.LAVALINK_NAME,
             port: parseInt(process.env.LAVALINK_PORT),
+            id: process.env.LAVALINK_ID,
             secure: Boolean(process.env.LAVALINK_SECURE),
         },
     ],
