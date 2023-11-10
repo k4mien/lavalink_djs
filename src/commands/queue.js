@@ -97,11 +97,13 @@ module.exports = {
                     currentPage += 1;
                     if (currentPage === embeds.length - 1) {
                         nextButton.setDisabled(true);
+                        previousButton.setDisabled(false)
                         interaction.update({
                             embeds: [embeds[currentPage].setFooter({text: `Page: ${currentPage + 1}/${embeds.length}`})],
                             components: [buttonRow],
                         });
                     } else {
+                        nextButton.setDisabled(false)
                         previousButton.setDisabled(false);
                         interaction.update({
                             embeds: [embeds[currentPage].setFooter({text: `Page: ${currentPage + 1}/${embeds.length}`})],
@@ -113,6 +115,7 @@ module.exports = {
                 if (currentPage !== 0) {
                     currentPage -= 1;
                     if (currentPage === 0) {
+                        nextButton.setDisabled(false)
                         previousButton.setDisabled(true);
                         interaction.update({
                             embeds: [embeds[currentPage].setFooter({text: `Page: ${currentPage + 1}/${embeds.length}`})],
