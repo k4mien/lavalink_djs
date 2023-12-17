@@ -20,7 +20,7 @@ services:
     command: npm run dev
 
   lavalink:
-    image: ghcr.io/lavalink-devs/lavalink:4.0.0-beta.5 # pin the image version to Lavalink v4
+    image: ghcr.io/lavalink-devs/lavalink:4 # pin the image version to Lavalink v4
     container_name: lavalink
     restart: unless-stopped
     environment:

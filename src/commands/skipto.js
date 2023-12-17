@@ -83,7 +83,8 @@ module.exports = {
         }
 
         if (!player.queue.tracks.length) {
-            await player.play({encodedTrack: null});
+            // await player.play({encodedTrack: null});
+            await player.stopPlaying();
         } else {
             await message.channel.send({
                 embeds: [

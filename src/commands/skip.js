@@ -51,7 +51,8 @@ module.exports = {
             });
 
         if (!player.queue.tracks.length) {
-            await player.play({encodedTrack: null});
+            // await player.play({encodedTrack: null});
+            await player.stopPlaying();
         } else {
             await player.skip();
             return message.channel.send({
