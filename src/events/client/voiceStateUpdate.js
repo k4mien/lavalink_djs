@@ -3,11 +3,9 @@ module.exports = async function (client) {
         let oldChannel = oldState?.channel
         let newChannel = newState?.channel
 
-        if (oldChannel?.members.size <= 1 && oldChannel.member.user.bot) {
+        if (oldChannel?.members.size <= 1) {
             const player = client.lavalink.getPlayer(oldState.guild.id)
-            setTimeout(() => {
-                player?.destroy("QueueEmpty")
-            }, 5000)
+            player?.destroy("QueueEmpty")
         }
     });
 };
