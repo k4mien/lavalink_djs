@@ -8,5 +8,4 @@ module.exports = async function (client) {
             player?.destroy("QueueEmpty")
         }
     });
-    s
 };
