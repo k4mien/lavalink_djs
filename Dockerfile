@@ -1,9 +1,3 @@
-#FROM node:20.8.0 as dev
-#WORKDIR /app
-#COPY src/package.json .
-#RUN npm install -y
-#COPY src ./
-
 FROM node:21-alpine as dev
 
 ARG NODE_ENV=development
