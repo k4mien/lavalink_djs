@@ -1,5 +1,4 @@
 const { EmbedBuilder } = require('discord.js')
-const url = require('url')
 
 module.exports = {
   name: 'play',
