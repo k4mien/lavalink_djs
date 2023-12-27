@@ -1,7 +1,7 @@
 {
   overrides:
     - files:
-        "*.js"
-      rules:
-        camelcase: off
+        "*.js",
+  rules:
+    camelcase: off
 }
