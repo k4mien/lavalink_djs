@@ -1,3 +1,7 @@
-rules: {
-  'camelcase': 'off',
+{
+  overrides:
+    - files:
+        "*.js"
+      rules:
+        camelcase: off
 }
