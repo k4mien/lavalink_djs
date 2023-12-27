@@ -1,35 +1,27 @@
-name: Lint Code Base
+name: Lint
 
-on:
-
-  push:
-    branches: [ dev ]
-
-  pull_request:
+on: # yamllint disable-line rule:truthy
+  push: dev
+  pull_request: dev
 
 jobs:
-  call-super-linter:
-
-    name: Call Super-Linter
+  build:
+    name: Lint
+    runs-on: ubuntu-latest
 
     permissions:
-      contents: read # clone the repo to lint
-      statuses: write #read/write to repo custom statuses
+      contents: read
+      packages: read
+      # To report GitHub Actions status checks
+      statuses: write
 
-    ### use Reusable Workflows to call my workflow remotely
-    ### https://docs.github.com/en/actions/learn-github-actions/reusing-workflows
-    ### you can also call workflows from inside the same repo via file path
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    #FIXME: customize uri to point to your own linter repository
-    uses: bretfisher/super-linter-workflow/.github/workflows/reusable-super-linter.yaml@main
-
-      ### Optional settings examples
-
-      # with:
-      ### For a DevOps-focused repository. Prevents some code-language linters from running
-      ### defaults to false
-    # devops-only: false
-
-    ### A regex to exclude files from linting
-    ### defaults to empty
-    # filter-regex-exclude: html/.*
+      - name: Super-linter
+        uses: super-linter/super-linter@v5.7.2
+        env:
+          DEFAULT_BRANCH: dev
+          # To report GitHub Actions status checks
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
