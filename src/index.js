@@ -1,8 +1,8 @@
-const client = require("./bot.js");
-const error = require("./utils/error.js");
-const handleCommands = require("./handlers/commandHandler");
-const handleEvents = require("./handlers/eventHandler");
+const client = require('./bot.js')
+const error = require('./utils/error.js')
+const handleCommands = require('./handlers/commandHandler')
+const handleEvents = require('./handlers/eventHandler')
 
-error(client);
-handleCommands(client);
-handleEvents(client);
+error(client)
+handleCommands(client)
+handleEvents(client)
