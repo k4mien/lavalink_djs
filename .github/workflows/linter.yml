@@ -1,60 +1,30 @@
 ---
-name: Lint all the codes
+name: Lint Code Base
 
 on:
-  workflow_call:
-    inputs:
-      filter-regex-exclude:
-        description: A regex to exclude files from linting
-        required: false
-        type: string
+  # run anytime a PR is merged to main or a direct push to main
+  push:
+    branches: [ main ]
 
-permissions:
-  contents: read
-  statuses: write
+  # run on any push to a PR branch
+  pull_request:
+
+# cancel any previously-started, yet still active runs of this workflow on the same branch
+concurrency:
+  group: ${{ github.ref }}-${{ github.workflow }}
+  cancel-in-progress: true
 
 jobs:
-  super-lint:
-    name: Super-Linter
+  call-super-linter:
 
-    runs-on: ubuntu-latest
+    name: Call Super-Linter
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+    permissions:
+      contents: read
+      statuses: write
 
-      - name: Set DEFAULT_BRANCH to PR target
-        if: ${{ github.base_ref != '' }}
-        run: |
-          echo "DEFAULT_BRANCH=${{ github.base_ref }}" >> $GITHUB_ENV
-          echo "this is a PR branch. Let's only lint the files that are changed against the target branch '${{ github.base_ref }}'"
+    # FIXME: customize uri to point to your own reusable linter repository
+    uses: k4mien/super-linter-bf/.github/workflows/reusable-super-linter.yaml@main
 
-      - name: Set DEFAULT_BRANCH to current branch
-        if: ${{ github.base_ref == '' }}
-        run: |
-          echo "DEFAULT_BRANCH=$(echo '${{ github.ref }}' | sed 's/refs\/heads\///')" >> $GITHUB_ENV
-          echo "this is just a branch push, not a PR."
-
-      - name: Are we linting all files?
-        run: |
-          echo VALIDATE_ALL_CODEBASE=${{ !contains(github.event_name, 'pull_request') }}
-
-      - name: FILTER REGEX_EXCLUDE
-        if: ${{ inputs.filter-regex-exclude }}
-        run: |
-          {
-            echo "FILTER_REGEX_EXCLUDE=${{ inputs.filter-regex-exclude }}" >> $GITHUB_ENV
-          }
-
-      - name: Lint Code Base
-        uses: super-linter/super-linter/slim@v5.7.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DEFAULT_BRANCH: ${{ env.DEFAULT_BRANCH }}
-          VALIDATE_ALL_CODEBASE: ${{ !contains(github.event_name, 'pull_request') }}
-          VALIDATE_DOCKERFILE: false
-          VALIDATE_JSCPD: false
-          VALIDATE_SHELL_SHFMT: false
-          VALIDATE_EDITORCONFIG: false
+#    with:
+#     filter-regex-exclude:
