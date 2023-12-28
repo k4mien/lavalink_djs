@@ -1,35 +1,60 @@
 ---
-name: Linting
+name: Lint all the codes
 
 on:
-  push:
-    branches:
-      - dev
-      - main
-  pull_request:
-    branches:
-      - dev
-      - main
+  workflow_call:
+    inputs:
+      filter-regex-exclude:
+        description: A regex to exclude files from linting
+        required: false
+        type: string
+
+permissions:
+  contents: read
+  statuses: write
 
 jobs:
-  build:
-    name: Lint
-    runs-on: ubuntu-latest
+  super-lint:
+    name: Super-Linter
 
-    permissions:
-      contents: read
-      packages: read
-      # To report GitHub Actions status checks
-      statuses: write
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Super-linter
-        uses: super-linter/super-linter@v5.7.2
+      - name: Set DEFAULT_BRANCH to PR target
+        if: ${{ github.base_ref != '' }}
+        run: |
+          echo "DEFAULT_BRANCH=${{ github.base_ref }}" >> $GITHUB_ENV
+          echo "this is a PR branch. Let's only lint the files that are changed against the target branch '${{ github.base_ref }}'"
+
+      - name: Set DEFAULT_BRANCH to current branch
+        if: ${{ github.base_ref == '' }}
+        run: |
+          echo "DEFAULT_BRANCH=$(echo '${{ github.ref }}' | sed 's/refs\/heads\///')" >> $GITHUB_ENV
+          echo "this is just a branch push, not a PR."
+
+      - name: Are we linting all files?
+        run: |
+          echo VALIDATE_ALL_CODEBASE=${{ !contains(github.event_name, 'pull_request') }}
+
+      - name: FILTER REGEX_EXCLUDE
+        if: ${{ inputs.filter-regex-exclude }}
+        run: |
+          {
+            echo "FILTER_REGEX_EXCLUDE=${{ inputs.filter-regex-exclude }}" >> $GITHUB_ENV
+          }
+
+      - name: Lint Code Base
+        uses: super-linter/super-linter/slim@v5.7.2
         env:
-          DEFAULT_BRANCH: main
-          # To report GitHub Actions status checks
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          FILTER_REGEX_INCLUDE: .*src/.*
+          DEFAULT_BRANCH: ${{ env.DEFAULT_BRANCH }}
+          VALIDATE_ALL_CODEBASE: ${{ !contains(github.event_name, 'pull_request') }}
+          VALIDATE_DOCKERFILE: false
+          VALIDATE_JSCPD: false
+          VALIDATE_SHELL_SHFMT: false
+          VALIDATE_EDITORCONFIG: false
