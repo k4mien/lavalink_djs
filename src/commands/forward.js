@@ -1,5 +1,5 @@
 const {EmbedBuilder} = require('discord.js')
-const formatMS_HHMMSS = require('../utils/time')
+const formatMSHHMMSS = require('../utils/time')
 
 module.exports = {
     name: 'forward',
@@ -91,7 +91,7 @@ module.exports = {
                 embeds: [
                     new EmbedBuilder()
                         .setColor('Purple')
-                        .setDescription(`:fast_forward: Forwarded the song to: \`[${formatMS_HHMMSS(player.position)} / ${formatMS_HHMMSS(player.queue.current.info.duration)}]\``)
+                        .setDescription(`:fast_forward: Forwarded the song to: \`[${formatMSHHMMSS(player.position)} / ${formatMSHHMMSS(player.queue.current.info.duration)}]\``)
                 ]
             })
         }
