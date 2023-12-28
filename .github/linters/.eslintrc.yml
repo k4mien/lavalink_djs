@@ -42,7 +42,7 @@ plugins:
 # Rules #
 #########
 rules: {
-  camelcase: off
+  camelcase: warn
 }
 
 ##############################
