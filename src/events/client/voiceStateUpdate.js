@@ -15,7 +15,6 @@ module.exports = async function (client) {
           const player = client.lavalink.getPlayer(oldState.guild.id)
           player?.destroy('QueueEmpty')
         }, 10000)
-        console.log('\nteststt\n')
       }
     }
   })
