@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   discordjs:
     build:
@@ -7,6 +5,7 @@ services:
       args:
         - NODE_ENV=production
       dockerfile: Dockerfile
+      target: prod
     environment:
       - NODE_ENV=production
     networks:
