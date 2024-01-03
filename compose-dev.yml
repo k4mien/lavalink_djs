@@ -1,23 +1,23 @@
-version: "3.9"
-
 services:
   discordjs:
     build:
-      context: .
-      args:
-        - NODE_ENV=development
       dockerfile: Dockerfile
-    volumes:
-      - ./src:/node/app
-      - ./src/package.json:/node/package.json
-      - ./src/package-lock.json:/node/package-lock.json
-      - ndm:/node/app/node_modules
-    environment:
-      - NODE_ENV=development
+      context: .
+      target: dev
+    develop:
+      watch:
+        - action: sync
+          path: ./src
+          target: /app
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: ./src/package.json
+        - action: rebuild
+          path: ./src/package-lock.json
     networks:
       - lavalink
     container_name: dc-docker
-    command: npm run dev
 
   lavalink:
     image: ghcr.io/lavalink-devs/lavalink:4
@@ -38,6 +38,3 @@ services:
 networks:
   lavalink: # create a lavalink network you can add other containers to, to give them access to Lavalink
     name: lavalink
-
-volumes:
-  ndm:
