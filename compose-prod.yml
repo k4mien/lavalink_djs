@@ -1,27 +1,15 @@
 services:
   discordjs:
     build:
-      context: .
       dockerfile: Dockerfile
-    develop:
-      watch:
-        - action: sync
-          path: ./src
-          target: /app
-          ignore:
-            - ./src/node_modules/
-        - action: rebuild
-          path: ./src/package.json
-        - action: rebuild
-          path: ./src/package-lock.json
+      context: .
+      target: prod
     networks:
       - lavalink
-    container_name: dc-docker
-    command: npm run dev
 
   lavalink:
+    build: .
     image: ghcr.io/lavalink-devs/lavalink:4
-    container_name: lavalink
     restart: unless-stopped
     environment:
       - _JAVA_OPTIONS=-Xmx4G
