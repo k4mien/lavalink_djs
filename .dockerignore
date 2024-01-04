@@ -11,3 +11,5 @@ README.md
 node_modules
 #webstorm
 .idea
+#env
+.env.example
