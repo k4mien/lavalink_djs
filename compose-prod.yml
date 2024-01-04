@@ -8,7 +8,7 @@ services:
       - lavalink
 
   lavalink:
-    build: .
+    container_name: lavalink
     image: ghcr.io/lavalink-devs/lavalink:4
     restart: unless-stopped
     environment:
