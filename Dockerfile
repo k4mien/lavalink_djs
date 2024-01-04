@@ -1,36 +1,19 @@
-#FROM node:21-alpine as dev
-#
-#ARG NODE_ENV=development
-#ENV NODE_ENV $NODE_ENV
-#
-#RUN npm i npm@latest -g
-#
-#USER node
-#
-#WORKDIR /node
-#COPY --chown=node:node src/package.json src/package-lock.json ./
-#RUN npm ci && npm cache clean --force
-#
-#ENV PATH /node/node_modules/.bin:$PATH
-#
-#WORKDIR /node/app
-#COPY --chown=node:node src ./
-
 FROM node:21-alpine as base
 
 ENV NODE_ENV=production
 RUN npm i npm@latest -g
 USER node
-WORKDIR /node
+WORKDIR /app
 COPY --chown=node:node src/package.json src/package-lock.json ./
 RUN npm ci && npm cache clean --force
-ENV PATH /node/node_modules/.bin:$PATH
+ENV PATH /app/node_modules/.bin:$PATH
 
 FROM base as dev
+
 ENV NODE_ENV=development
 RUN npm install
-WORKDIR /node/app
-COPY --chown=node:node src ./
+COPY --chown=node:node ./src ./
 
 FROM base as prod
-COPY --chown=node:node src ./
+
+COPY --chown=node:node ./src ./
