@@ -8,8 +8,8 @@
 #readme
 README.md
 #node
-node_modules
+**/node_modules
 #webstorm
 .idea
 #env
-.env.example
+**/.env.example
