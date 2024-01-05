@@ -11,7 +11,7 @@ const client = new Client({
     GatewayIntentBits.MessageContent
   ]
 })
-a
+
 client.lavalink = new LavalinkManager({
   nodes: [
     {
