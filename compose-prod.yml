@@ -1,15 +1,16 @@
 services:
   discordjs:
     build:
-      dockerfile: Dockerfile
       context: .
+      dockerfile: Dockerfile
       target: prod
     networks:
       - lavalink
+    container_name: dc-docker
 
   lavalink:
-    container_name: lavalink
     image: ghcr.io/lavalink-devs/lavalink:4
+    container_name: lavalink
     restart: unless-stopped
     environment:
       - _JAVA_OPTIONS=-Xmx4G
