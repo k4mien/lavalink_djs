@@ -13,9 +13,9 @@ FROM base as dev
 ENV NODE_ENV=development
 RUN npm install
 COPY --chown=node:node ./src ./
-CMD ["nodemon", "index.js"]
+CMD ["npm", "run", "dev"]
 
 FROM base as prod
 
 COPY --chown=node:node ./src ./
-CMD ["node", "index.js"]
+CMD ["npm", "run", "start"]
