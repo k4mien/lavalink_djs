@@ -1,5 +1,6 @@
 ---
-name: Deployment to AWS
+name: Deploy to Amazon ECS
+
 on:
   push:
     branches: [ dev, main ]
@@ -10,6 +11,7 @@ jobs:
   deploy:
     name: Deployment
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
