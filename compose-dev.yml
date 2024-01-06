@@ -1,0 +1,39 @@
+services:
+  discordjs:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: dev
+    develop:
+      watch:
+        - action: sync
+          path: ./src
+          target: /app
+          ignore:
+            - node_modules
+        - action: rebuild
+          path: ./src/package.json
+        - action: rebuild
+          path: ./src/package-lock.json
+    networks:
+      - lavalink
+    container_name: dc-docker
+
+  lavalink:
+    image: ghcr.io/lavalink-devs/lavalink:4
+    container_name: lavalink
+    restart: unless-stopped
+    environment:
+      - _JAVA_OPTIONS=-Xmx4G
+    volumes:
+      - ./application.yml:/opt/Lavalink/application.yml
+    networks:
+      - lavalink
+    expose:
+      - 2333
+    ports:
+      - "2333:2333"
+
+networks:
+  lavalink:
+    name: lavalink

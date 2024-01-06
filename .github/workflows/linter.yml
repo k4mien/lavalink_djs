@@ -1,0 +1,30 @@
+---
+name: Lint Code Base
+
+on:
+  # run anytime a PR is merged to main or a direct push to main
+  push:
+    branches: [ main, dev ]
+
+  # run on any push to a PR branch
+  pull_request:
+
+# cancel any previously-started, yet still active runs of this workflow on the same branch
+concurrency:
+  group: ${{ github.ref }}-${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  call-super-linter:
+
+    name: Call Super-Linter
+
+    permissions:
+      contents: read
+      statuses: write
+
+    # FIXME: customize uri to point to your own reusable linter repository
+    uses: k4mien/super-linter-bf/.github/workflows/reusable-super-linter.yaml@main
+
+    with:
+      filter-regex-include: src/.*
