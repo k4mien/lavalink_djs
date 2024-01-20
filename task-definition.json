@@ -44,7 +44,7 @@
     },
     {
       "name": "discordjs",
-      "image": "",
+      "image": "730519783440.dkr.ecr.eu-central-1.amazonaws.com/myrepo:67b2c9363dbb5ce51ddae15ec8694fa0ac134e68",
       "cpu": 0,
       "portMappings": [],
       "essential": true,
