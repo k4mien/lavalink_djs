@@ -8,6 +8,19 @@ on:
     branches: [ dev, main ]
 
 jobs:
+  lint:
+    name: Linting
+
+    permissions:
+      contents: read
+      statuses: write
+
+    # FIXME: customize uri to point to your own reusable linter repository
+    uses: k4mien/super-linter-bf/.github/workflows/reusable-super-linter.yaml@main
+
+    with:
+      filter-regex-include: src/.*
+
   deploy:
     name: Deployment
     runs-on: ubuntu-latest
@@ -38,18 +51,15 @@ jobs:
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
-      - name: Fill in the new image ID in the Amazon ECS task definition
-        id: task-def
-        uses: aws-actions/amazon-ecs-render-task-definition@v1
+      - name: SSH into EC2 instance and deploy
+        uses: appleboy/ssh-action@v1.0.3
         with:
-          task-definition: task-definition.json
-          container-name: discordjs
-          image: ${{ steps.build-image.outputs.image }}
-
-      - name: Deploy Amazon ECS task definition
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-        with:
-          task-definition: ${{ steps.task-def.outputs.task-definition }}
-          service: discord-bot-lavalink
-          cluster: discord-bot-lavalink
-          wait-for-service-stability: true
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+#          script: |
+#            sudo docker pull ${{ secrets.DOCKER_REPO_URL }}/dummy-server:latest
+#            sudo docker stop my-node-app || true
+#            sudo docker rm my-node-app || true
+#            sudo docker run -d -p 3000:3000 --name my-node-app ${{ secrets.DOCKER_REPO_URL }}/dummy-server:latest
+          script: whoami
