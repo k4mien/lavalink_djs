@@ -63,7 +63,7 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           port: 22
           key: ${{ secrets.EC2_SSH_KEY }}
-          source: "./compose-prod-aws.yml,./application.yml"
+          source: "./application.yml,./compose-prod-aws.yml"
           target: "~/.deploy/djs/"
 
       - name: SSH into EC2 instance and deploy
