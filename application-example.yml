@@ -16,11 +16,7 @@ plugins:
       albumLoadLimit: 6 # The number of pages at 50 tracks each
 lavalink:
   plugins:
-    - dependency: "com.github.topi314.lavasrc:lavasrc-plugin:4.0.0-beta.7"
-      repository: "https://maven.topi.wtf/releases"
-    #  - dependency: "com.github.topi314.lavasearch:lavasearch-plugin:1.0.0-beta.2"
-    #    repository: "https://maven.topi.wtf/releases"
-  #  pluginsDir: "./plugins"
+    - dependency: "com.github.topi314.lavasrc:lavasrc-plugin:4.0.1"
   server:
     password: ""
     sources:
