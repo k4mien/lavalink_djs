@@ -1,5 +1,5 @@
 ---
-name: Deploy to Amazon ECS
+name: CI/CD
 
 on:
   push:
@@ -10,21 +10,18 @@ on:
 jobs:
   lint:
     name: Linting
-
     permissions:
       contents: read
       statuses: write
-
     # FIXME: customize uri to point to your own reusable linter repository
     uses: k4mien/super-linter-bf/.github/workflows/reusable-super-linter.yaml@main
-
     with:
       filter-regex-include: src/.*
 
-  deploy:
-    name: Deployment
+  push_to_registry:
+    name: Push to ECR
+    needs: lint
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -51,15 +48,31 @@ jobs:
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
+  deploy_to_server:
+    name: Deploy to EC2
+    needs: push_to_registry
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: SCP docker compose and lavalink config to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          port: 22
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: "./compose-prod-aws.yml,./application.yml"
+          target: "~/.deploy/djs/"
+
       - name: SSH into EC2 instance and deploy
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
-#          script: |
-#            sudo docker pull ${{ secrets.DOCKER_REPO_URL }}/dummy-server:latest
-#            sudo docker stop my-node-app || true
-#            sudo docker rm my-node-app || true
-#            sudo docker run -d -p 3000:3000 --name my-node-app ${{ secrets.DOCKER_REPO_URL }}/dummy-server:latest
-          script: whoami
+          script: |
+            cd ~/.deploy/djs/
+            docker compose -f compose-prod-aws.yml pull
+            docker compose -f compose-prod-aws.yml up -d
