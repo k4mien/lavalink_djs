@@ -58,11 +58,11 @@ jobs:
 
       - name: Fill .env file with secrets
         run: |
-          echo "LAVALINK_SERVER_PASSWORD= ${{ secrets.LAVALINK_SERVER_PASSWORD }}">> application.env
-          echo "PLUGINS_LAVASRC_SPOTIFY_CLIENTID= ${{ secrets.PLUGINS_LAVASRC_SPOTIFY_CLIENTID }}">> application.env
-          echo "PLUGINS_LAVASRC_SPOTIFY_CLIENTSECRET= ${{ secrets.PLUGINS_LAVASRC_SPOTIFY_CLIENTSECRET }}">> application.env
-          echo "SERVER_ADDRESS= ${{ secrets.SERVER_ADDRESS }}">> application.env
-          echo "SERVER_PORT= ${{ secrets.SERVER_PORT }}">> application.env
+          echo "LAVALINK_SERVER_PASSWORD=${{ secrets.LAVALINK_SERVER_PASSWORD }}">> application.env
+          echo "PLUGINS_LAVASRC_SPOTIFY_CLIENTID=${{ secrets.PLUGINS_LAVASRC_SPOTIFY_CLIENTID }}">> application.env
+          echo "PLUGINS_LAVASRC_SPOTIFY_CLIENTSECRET=${{ secrets.PLUGINS_LAVASRC_SPOTIFY_CLIENTSECRET }}">> application.env
+          echo "SERVER_ADDRESS=${{ secrets.SERVER_ADDRESS }}">> application.env
+          echo "SERVER_PORT=${{ secrets.SERVER_PORT }}">> application.env
 
       - name: SCP docker compose and lavalink config to server
         uses: appleboy/scp-action@v0.1.7
