@@ -57,12 +57,12 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Create .env files with secrets
-      - env:
+        env:
           IMAGE_URL: ${{ needs.push_to_registry.outputs.IMAGE_URL }}
         run: |
           echo "${{ secrets.ENV_FILE_LAVALINK }}">> application.env
           echo "${{ secrets.ENV_FILE_BOT }}">> bot.env
-          echo "IMAGE=$IMAGE_URL">> .env
+          echo "IMAGE=${{ needs.push_to_registry.outputs.IMAGE_URL }}">> .env
 
       - name: SCP docker compose and lavalink config to server
         uses: appleboy/scp-action@v0.1.7
