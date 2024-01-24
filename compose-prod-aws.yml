@@ -1,11 +1,8 @@
 services:
   discordjs:
-    build:
-      context: https://github.com/k4mien/lavalink_djs.git
-      dockerfile: Dockerfile
-      target: prod
+    image: ${IMAGE}
     env_file:
-      - .env
+      - bot.env
     restart: always
     networks:
       - lavalink
