@@ -21,7 +21,7 @@ jobs:
     needs: lint
     runs-on: ubuntu-latest
     outputs:
-      image_url: ${{ steps.build-image.outputs.image }}
+      IMAGE_URL: ${{ steps.build-image.outputs.IMAGE }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -46,7 +46,7 @@ jobs:
         run: |
           docker build --target prod --tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+          echo "IMAGE=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
   deploy_to_server:
     name: Deploy to EC2
@@ -60,7 +60,7 @@ jobs:
         run: |
           echo "${{ secrets.ENV_FILE_LAVALINK }}">> application.env
           echo "${{ secrets.ENV_FILE_BOT }}">> bot.env
-          echo "IMAGE=${{ needs.push_to_registry.outputs.image_url }}">> .env
+          echo "IMAGE=${{ needs.push_to_registry.outputs.IMAGE_URL }}">> .env
 
       - name: SCP docker compose and lavalink config to server
         uses: appleboy/scp-action@v0.1.7
