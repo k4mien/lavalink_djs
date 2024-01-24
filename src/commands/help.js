@@ -14,7 +14,7 @@ module.exports = {
           .setDescription(
             client.commands
               .map(
-                (cmd) => (`${cmd.aliases}` !== 'undefined') ? `\`!${cmd.name}, !${cmd.aliases}${cmd.options}\`\t - ${cmd.description}` : `\`!${cmd.name}${cmd.options}\`\t - ${cmd.description}`
+                (cmd) => (`${cmd.aliases}` !== 'undefined') ? `\`-${cmd.name}, -${cmd.aliases}${cmd.options}\`\t - ${cmd.description}` : `\`-${cmd.name}${cmd.options}\`\t - ${cmd.description}`
               )
               .join('\n')
           )
