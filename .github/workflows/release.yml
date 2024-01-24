@@ -54,7 +54,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Create bot.env files with secrets
+      - name: Create .env files with secrets
         run: |
           echo "${{ secrets.ENV_FILE_LAVALINK }}">> application.env
           echo "${{ secrets.ENV_FILE_BOT }}">> bot.env
@@ -68,7 +68,7 @@ jobs:
           port: 22
           key: ${{ secrets.EC2_SSH_KEY }}
           rm: true
-          source: "/.env,./bot.env,./application.env,./compose-prod-aws.yml"
+          source: "./.env,./bot.env,./application.env,./compose-prod-aws.yml"
           target: "~/.deploy/djs/"
 
       - name: SSH into EC2 instance and deploy
