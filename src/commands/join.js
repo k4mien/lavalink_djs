@@ -61,7 +61,7 @@ module.exports = {
         applyVolumeAsFilter: false
       })
       await newPlayer.connect()
-      return message.channel.send({
+      await message.channel.send({
         embeds: [
           new EmbedBuilder().setColor('Purple').setDescription(`Joined ${voiceChannel}!`)
         ]

@@ -61,7 +61,7 @@ module.exports = {
       })
     } else {
       await player.pause()
-      return message.channel.send({
+      await message.channel.send({
         embeds: [
           new EmbedBuilder()
             .setColor('Purple')

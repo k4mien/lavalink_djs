@@ -52,7 +52,7 @@ module.exports = {
 
     if (player.queue.tracks.length) {
       await player.queue.splice(0, player.queue.tracks.length)
-      return message.channel.send({
+      await message.channel.send({
         embeds: [
           new EmbedBuilder()
             .setColor('Purple')
