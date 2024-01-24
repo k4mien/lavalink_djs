@@ -3,9 +3,9 @@ name: CI/CD
 
 on:
   push:
-    branches: [ dev, main ]
+    branches: [ main ]
   pull_request:
-    branches: [ dev, main ]
+    branches: [ main ]
 
 jobs:
   lint:
@@ -56,13 +56,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Fill .env file with secrets
+      - name: Create .env files with secrets
         run: |
-          echo "LAVALINK_SERVER_PASSWORD=${{ secrets.LAVALINK_SERVER_PASSWORD }}">> application.env
-          echo "PLUGINS_LAVASRC_SPOTIFY_CLIENTID=${{ secrets.PLUGINS_LAVASRC_SPOTIFY_CLIENTID }}">> application.env
-          echo "PLUGINS_LAVASRC_SPOTIFY_CLIENTSECRET=${{ secrets.PLUGINS_LAVASRC_SPOTIFY_CLIENTSECRET }}">> application.env
-          echo "SERVER_ADDRESS=${{ secrets.SERVER_ADDRESS }}">> application.env
-          echo "SERVER_PORT=${{ secrets.SERVER_PORT }}">> application.env
+          echo "${{ secrets.ENV_FILE_LAVALINK }}">> application.env
+          echo "${{ secrets.ENV_FILE_DC }}">> .env
 
       - name: SCP docker compose and lavalink config to server
         uses: appleboy/scp-action@v0.1.7
@@ -71,7 +68,8 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           port: 22
           key: ${{ secrets.EC2_SSH_KEY }}
-          source: "./application.env,./compose-prod-aws.yml"
+          rm: true
+          source: "./.env,./application.env,./compose-prod-aws.yml"
           target: "~/.deploy/djs/"
 
       - name: SSH into EC2 instance and deploy

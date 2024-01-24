@@ -4,6 +4,8 @@ services:
       context: https://github.com/k4mien/lavalink_djs.git
       dockerfile: Dockerfile
       target: prod
+    env_file:
+      - .env
     restart: always
     networks:
       - lavalink
