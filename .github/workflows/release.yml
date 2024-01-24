@@ -58,8 +58,7 @@ jobs:
 
       - name: Create .env files with secrets
       - env:
-        IMAGE_URL: ${{ needs.push_to_registry.outputs.IMAGE_URL }}
-
+          IMAGE_URL: ${{ needs.push_to_registry.outputs.IMAGE_URL }}
         run: |
           echo "${{ secrets.ENV_FILE_LAVALINK }}">> application.env
           echo "${{ secrets.ENV_FILE_BOT }}">> bot.env
