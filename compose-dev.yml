@@ -4,6 +4,8 @@ services:
       context: .
       dockerfile: Dockerfile
       target: dev
+    env_file:
+      - .env
     develop:
       watch:
         - action: sync
@@ -24,9 +26,9 @@ services:
     container_name: lavalink
     restart: unless-stopped
     environment:
-      - _JAVA_OPTIONS=-Xmx4G
-    volumes:
-      - ./application.yml:/opt/Lavalink/application.yml
+      - _JAVA_OPTIONS=-Xmx1G
+    env_file:
+      - application.env
     networks:
       - lavalink
     expose:

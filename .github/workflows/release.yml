@@ -1,0 +1,84 @@
+---
+name: CI/CD
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  lint:
+    name: Linting
+    permissions:
+      contents: read
+      statuses: write
+    # FIXME: customize uri to point to your own reusable linter repository
+    uses: k4mien/super-linter-bf/.github/workflows/reusable-super-linter.yaml@main
+    with:
+      filter-regex-include: src/.*
+
+  push_to_registry:
+    name: Push to ECR
+    needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-central-1
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build, tag, and push image to Amazon ECR
+        id: build-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: myrepo
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build --target prod --tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+
+  deploy_to_server:
+    name: Deploy to EC2
+    needs: push_to_registry
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Create .env files with secrets
+        run: |
+          echo "${{ secrets.ENV_FILE_LAVALINK }}">> application.env
+          echo "${{ secrets.ENV_FILE_DC }}">> .env
+
+      - name: SCP docker compose and lavalink config to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          port: 22
+          key: ${{ secrets.EC2_SSH_KEY }}
+          rm: true
+          source: "./.env,./application.env,./compose-prod-aws.yml"
+          target: "~/.deploy/djs/"
+
+      - name: SSH into EC2 instance and deploy
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd ~/.deploy/djs/
+            docker compose -f compose-prod-aws.yml pull
+            docker compose -f compose-prod-aws.yml up -d
