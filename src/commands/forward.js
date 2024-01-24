@@ -86,8 +86,8 @@ module.exports = {
     }
 
     if (player.playing && !player.paused) {
-      player.seek(player.position + time)
-      return message.channel.send({
+      await player.seek(player.position + time)
+      await message.channel.send({
         embeds: [
           new EmbedBuilder()
             .setColor('Purple')
