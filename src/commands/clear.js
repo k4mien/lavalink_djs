@@ -2,7 +2,7 @@ const { EmbedBuilder } = require('discord.js')
 
 module.exports = {
   name: 'clear',
-  description: 'Clear the queue',
+  description: 'Clear queue',
   options: [],
   run: async (client, message) => {
     if (!message.guildId) return
