@@ -5,7 +5,7 @@ services:
       dockerfile: Dockerfile
       target: dev
     env_file:
-      - .env
+      - bot.env
     develop:
       watch:
         - action: sync
