@@ -2,7 +2,7 @@ const { EmbedBuilder } = require('discord.js')
 
 module.exports = {
   name: 'join',
-  description: 'Connect bot to the channel',
+  description: 'Join to the channel',
   options: [],
   run: async (client, message) => {
     if (!message.guildId) return

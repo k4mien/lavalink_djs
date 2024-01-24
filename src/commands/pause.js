@@ -2,7 +2,7 @@ const { EmbedBuilder } = require('discord.js')
 
 module.exports = {
   name: 'pause',
-  description: 'Pause the queue',
+  description: 'Pause the player',
   options: [],
   inVoiceChannel: true,
   run: async (client, message) => {
