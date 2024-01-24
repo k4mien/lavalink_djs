@@ -1,4 +1,4 @@
 node_modules
-.env
+bot.env
 application.env
 .idea
