@@ -44,7 +44,7 @@ jobs:
         run: |
           docker build --target prod --tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_ENV
 
   deploy_to_server:
     name: Deploy to EC2
@@ -54,10 +54,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Create .env files with secrets
+      - name: Create bot.env files with secrets
         run: |
           echo "${{ secrets.ENV_FILE_LAVALINK }}">> application.env
-          echo "${{ secrets.ENV_FILE_DC }}">> .env
+          echo "${{ secrets.ENV_FILE_BOT }}">> bot.env
+          echo "IMAGE=${{ env.image }}">> .env
 
       - name: SCP docker compose and lavalink config to server
         uses: appleboy/scp-action@v0.1.7
@@ -67,7 +68,7 @@ jobs:
           port: 22
           key: ${{ secrets.EC2_SSH_KEY }}
           rm: true
-          source: "./.env,./application.env,./compose-prod-aws.yml"
+          source: "./bot.env,./application.env,./compose-prod-aws.yml"
           target: "~/.deploy/djs/"
 
       - name: SSH into EC2 instance and deploy
