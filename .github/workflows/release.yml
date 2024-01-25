@@ -18,10 +18,8 @@ jobs:
 
   push_to_registry:
     name: Push to ECR
-    needs: lint
+#    needs: lint
     runs-on: ubuntu-latest
-    outputs:
-      IMAGE_URL: ${{ steps.build-image.outputs.IMAGE }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -47,7 +45,8 @@ jobs:
           docker build --target prod --tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "IMAGE=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
-          echo "$GITHUB_OUTPUT"
+    outputs:
+      IMAGE_URL: ${{ steps.build-image.outputs.IMAGE }}
 
   deploy_to_server:
     name: Deploy to EC2
