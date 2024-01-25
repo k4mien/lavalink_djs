@@ -21,7 +21,8 @@ jobs:
 #    needs: lint
     runs-on: ubuntu-latest
     outputs:
-      image: ${{ steps.build-image.outputs.image}}
+      image:
+        value: ${{ steps.build-image.outputs.image}}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -46,7 +47,7 @@ jobs:
         run: |
           docker build --target prod --tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          echo "image=${$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG}" >> $GITHUB_OUTPUT
+          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
   deploy_to_server:
     name: Deploy to EC2
