@@ -65,13 +65,12 @@ jobs:
 
       - name: SSH into EC2 instance and deploy
         uses: appleboy/ssh-action@v1.0.3
-        env:
-          PSD:
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
+            aws ecr get-login-password | docker login -u ${{ secrets.EC2_USERNAME }} --password-stdin ${{ secrets.ECR_REGISTRY }}
             cd ~/.deploy/djs/
             docker compose -f compose-prod-aws.yml pull
             docker compose -f compose-prod-aws.yml up -d
