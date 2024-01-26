@@ -65,6 +65,8 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
+        run: |
+          echo "token=aws ecr get-login-password">> $GITHUB_ENV
 
       - name: Create .env files with secrets
         run: |
@@ -86,13 +88,14 @@ jobs:
       - name: SSH into EC2 instance and deploy
         uses: appleboy/ssh-action@v1.0.3
         env:
+          ECR_TOKEN: ${{ env.token }}
           USERNAME: ${{ secrets.EC2_USERNAME }}
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            aws ecr get-login-password | docker login -u $USERNAME --password-stdin $ECR_REGISTRY
+            echo $ECR_TOKEN | docker login -u $USERNAME --password-stdin $ECR_REGISTRY
             cd ~/.deploy/djs/
             docker compose -f compose-prod-aws.yml pull
             docker compose -f compose-prod-aws.yml up -d
