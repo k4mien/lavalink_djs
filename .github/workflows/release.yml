@@ -6,7 +6,7 @@ on:
     branches: [ main ]
 
 env:
-  ECR_REGISTRY:
+  ECR_REGISTRY: test
   ECR_REPOSITORY: myrepo
   IMAGE_TAG: ${{ github.sha }}
 
