@@ -86,7 +86,7 @@ module.exports = {
     }
 
     if (player.playing && !player.paused) {
-      await player.seek(player.position + time)
+      await player.seek(time)
       await message.channel.send({
         embeds: [
           new EmbedBuilder()
