@@ -7,7 +7,7 @@ on:
 
 env:
   ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
-  ECR_REPOSITORY: ${{ github.repository }}
+  ECR_REPOSITORY: ${{ github.event.repository.name }}
   IMAGE_TAG: ${{ github.sha }}
 
 jobs:
