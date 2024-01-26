@@ -2,8 +2,11 @@
 name: CI/CD
 
 on:
-  push:
-    branches: [ main ]
+  workflow_run:
+    workflows: ["Linter"]
+    branches: [main]
+    types:
+      - completed
 
 env:
   ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
