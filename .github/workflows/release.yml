@@ -6,8 +6,8 @@ on:
     branches: [ main ]
 
 env:
-  ECR_REGISTRY: test
-  ECR_REPOSITORY: myrepo
+  ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
+  ECR_REPOSITORY: ${{ github.repostiory }}
   IMAGE_TAG: ${{ github.sha }}
 
 jobs:
@@ -43,7 +43,6 @@ jobs:
       - name: Build, tag, and push image to Amazon ECR
         id: build-image
         run: |
-          echo "$ECR_REGISTRY=test"
           docker build --target prod --tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
@@ -60,7 +59,7 @@ jobs:
         run: |
           echo "${{ secrets.ENV_FILE_LAVALINK }}">> application.env
           echo "${{ secrets.ENV_FILE_BOT }}">> bot.env
-          echo "IMAGE=">> .env
+          echo "IMAGE=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG">> .env
 
       - name: SCP docker compose and lavalink config to server
         uses: appleboy/scp-action@v0.1.7
