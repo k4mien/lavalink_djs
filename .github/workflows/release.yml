@@ -71,7 +71,7 @@ jobs:
           echo "${{ secrets.ENV_FILE_LAVALINK }}">> application.env
           echo "${{ secrets.ENV_FILE_BOT }}">> bot.env
           echo "IMAGE=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG">> .env
-          echo "token=aws ecr get-login-password">> $GITHUB_ENV
+          echo "token=$echo(aws ecr get-login-password)">> $GITHUB_ENV
 
       - name: SCP docker compose and lavalink config to server
         uses: appleboy/scp-action@v0.1.7
