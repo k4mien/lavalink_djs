@@ -65,14 +65,13 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
-        run: |
-          echo "token=aws ecr get-login-password">> $GITHUB_ENV
 
       - name: Create .env files with secrets
         run: |
           echo "${{ secrets.ENV_FILE_LAVALINK }}">> application.env
           echo "${{ secrets.ENV_FILE_BOT }}">> bot.env
           echo "IMAGE=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG">> .env
+          echo "token=aws ecr get-login-password">> $GITHUB_ENV
 
       - name: SCP docker compose and lavalink config to server
         uses: appleboy/scp-action@v0.1.7
