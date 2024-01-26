@@ -23,7 +23,7 @@ jobs:
 
   push_to_registry:
     name: Push to ECR
-#    needs: lint
+    needs: lint
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -78,7 +78,6 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: ${{ secrets.AWS_REGION }}
-#          ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
