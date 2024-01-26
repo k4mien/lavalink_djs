@@ -70,7 +70,7 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            aws ecr get-login-password | docker login -u ${{ secrets.EC2_USERNAME }} --password-stdin ${{ secrets.ECR_REGISTRY }}
+            aws ecr get-login-password | docker login -u ${{ secrets.EC2_USERNAME }} --password-stdin 730519783440.dkr.ecr.eu-central-1.amazonaws.com
             cd ~/.deploy/djs/
             docker compose -f compose-prod-aws.yml pull
             docker compose -f compose-prod-aws.yml up -d
