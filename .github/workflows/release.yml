@@ -46,6 +46,7 @@ jobs:
           docker build --target prod --tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+          echo ${{ steps.login-ecr.outputs.registry }}
     outputs:
       registry: ${{ steps.login-ecr.outputs.registry }}
 
@@ -61,7 +62,7 @@ jobs:
         run: |
           echo "${{ secrets.ENV_FILE_LAVALINK }}">> application.env
           echo "${{ secrets.ENV_FILE_BOT }}">> bot.env
-          echo ${{ needs.push_to_registry.outputs }}
+          echo ${{ needs.push_to_registry.outputs.registry }}
           echo "IMAGE=${{ needs.push_to_registry.outputs.registry }}/$ECR_REPOSITORY:$IMAGE_TAG">> .env
 
       - name: SCP docker compose and lavalink config to server
