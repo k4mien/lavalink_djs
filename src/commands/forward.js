@@ -1,5 +1,5 @@
 const { EmbedBuilder } = require('discord.js')
-const formatMSHHMMSS  = require('../utils/time')
+const formatMSHHMMSS = require('../utils/time')
 
 module.exports = {
   name: 'forward',
