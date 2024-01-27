@@ -3,7 +3,8 @@ name: Linter
 
 on:
   push:
-    branches: [ dev, main ]
+    branches: [ dev ]
+  pull_request:
 
 concurrency:
   group: ${{ github.ref }}-${{ github.workflow }}
