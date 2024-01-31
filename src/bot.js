@@ -30,7 +30,7 @@ client.lavalink = new LavalinkManager({
   },
   autoSkip: true,
   playerOptions: {
-    clientBasedPositionUpdateInterval: 150,
+    clientBasedPositionUpdateInterval: 50,
     defaultSearchPlatform: 'ytsearch',
     // requesterTransformer: requesterTransformer,
     onDisconnect: {
