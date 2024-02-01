@@ -43,7 +43,7 @@ module.exports = {
       })
     }
 
-    if ((!player.playing && !player.paused) || !player.queue.current) {
+    if (!player.queue.current) {
       return message.channel.send({
         embeds: [
           new EmbedBuilder()
@@ -85,15 +85,22 @@ module.exports = {
       })
     }
 
-    if (player.playing && !player.paused) {
-      await player.seek(time)
-      await message.channel.send({
+    if (time > player.queue.current.info.duration || time < 0)
+      return await message.channel.send({
         embeds: [
           new EmbedBuilder()
-            .setColor('Purple')
-            .setDescription(`:fast_forward: Forwarded the song to: \`[${formatMSHHMMSS(player.position)} / ${formatMSHHMMSS(player.queue.current.info.duration)}]\``)
+              .setColor('Purple')
+              .setDescription(`The position cannot be bigger than song duration or negative`)
         ]
       })
-    }
+
+    await player.seek(time)
+    await message.channel.send({
+      embeds: [
+        new EmbedBuilder()
+          .setColor('Purple')
+          .setDescription(`:fast_forward: Forwarded the song to: \`[${formatMSHHMMSS(time)} / ${formatMSHHMMSS(player.queue.current.info.duration)}]\``)
+      ]
+    })
   }
 }
