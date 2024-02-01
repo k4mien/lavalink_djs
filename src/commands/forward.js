@@ -85,14 +85,15 @@ module.exports = {
       })
     }
 
-    if (time > player.queue.current.info.duration || time < 0)
+    if (time > player.queue.current.info.duration || time < 0) {
       return await message.channel.send({
         embeds: [
           new EmbedBuilder()
-              .setColor('Purple')
-              .setDescription(`The position cannot be bigger than song duration or negative`)
+            .setColor('Purple')
+            .setDescription('The position cannot be bigger than song duration or negative')
         ]
       })
+    }
 
     await player.seek(time)
     await message.channel.send({
