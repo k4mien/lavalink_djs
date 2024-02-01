@@ -41,7 +41,7 @@ module.exports = {
       })
     }
 
-    if (!player.playing && !player.paused) {
+    if (!player.queue.current) {
       return message.channel.send({
         embeds: [
           new EmbedBuilder()
