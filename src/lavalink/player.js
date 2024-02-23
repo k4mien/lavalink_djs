@@ -79,6 +79,7 @@ module.exports = async function (client) {
         const oldMsg = await channel.messages.fetch(songMsg[channel.id])
         await oldMsg.delete()
       }
+      songMsg = {}
 
       const msg = await channel?.send({
         embeds: [
