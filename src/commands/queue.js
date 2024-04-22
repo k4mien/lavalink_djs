@@ -170,8 +170,10 @@ function embedGenerator (player) {
       .setDescription(
         player.queue.current.info.sourceName === 'youtube'
           ? `**Now Playing:** [${player.queue.current.info.title}](${player.queue.current.info.uri}) - \`[${formatMSHHMMSS(player
+                .position)} / ${formatMSHHMMSS(player
                         .queue.current.info.duration)}]\`\n\n${info}`
           : `**Now Playing:** [${player.queue.current.info.author} - ${player.queue.current.info.title}](${player.queue.current.info.uri}) - \`[${formatMSHHMMSS(player
+                .position)} / ${formatMSHHMMSS(player
                         .queue.current.info.duration)}]\`\n\n${info}`
       )
     embeds.push(msg)
