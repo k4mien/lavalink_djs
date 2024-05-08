@@ -32,7 +32,7 @@ cd lavalink_djs
 ```
 3. Rename .env.example to bot.env
 ```bash
-mv env.example bot.env
+mv .env.example bot.env
 ```
 4. Fill .env file with your settings
 ```bash
@@ -128,7 +128,7 @@ LOGGING_LOGBACK_ROLLINGPOLICY_MAX_HISTORY=30
 ```
 7. Start docker compose
 ```bash
-docker compose -f docker-compose-prod.yml up
+docker compose -f compose-prod.yml up
 ```
 Enjoy music :)
 
