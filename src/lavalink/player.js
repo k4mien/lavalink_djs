@@ -1,70 +1,58 @@
-const { EmbedBuilder } = require('discord.js')
-const formatMSHHMMSS = require('../utils/time')
-let songMsg = {}
+const { EmbedBuilder } = require("discord.js");
+const formatMSHHMMSS = require("../utils/time");
+let songMsg = {};
 
 module.exports = async function (client) {
   client.lavalink
-    .on('playerCreate', (player) => {
-      console.log(player.guildId, ' :: Created a Player :: ')
+    .on("playerCreate", (player) => {
+      console.log(player.guildId, " :: Created a Player :: ");
     })
-    .on('playerDestroy', async (player, reason) => {
-      console.log(player.guildId, ' :: Player got Destroyed :: ')
-      const channel = client.channels.cache.get(player.textChannelId)
-      if (!channel) return
+    .on("playerDestroy", async (player, reason) => {
+      console.log(player.guildId, " :: Player got Destroyed :: ");
+      const channel = client.channels.cache.get(player.textChannelId);
+      if (!channel) return;
 
       channel.send({
         embeds: [
           new EmbedBuilder()
-            .setColor('Purple')
+            .setColor("Purple")
             .setDescription(
-                            `${reason}` === 'QueueEmpty'
-                              ? ':wheelchair: I left the channel due to inactivity!'
-                              : `${reason}!`
-            )
-        ]
-      })
+              `${reason}` === "QueueEmpty" ? ":wheelchair: I left the channel due to inactivity!" : `${reason}!`
+            ),
+        ],
+      });
       if (songMsg[channel.id]) {
-        const oldMsg = await channel.messages.fetch(songMsg[channel.id])
-        await oldMsg.delete()
+        const oldMsg = await channel.messages.fetch(songMsg[channel.id]);
+        await oldMsg.delete();
       }
-      songMsg = {}
+      songMsg = {};
     })
-    .on('playerDisconnect', (player, voiceChannelId) => {
-      console.log(
-        player.guildId,
-        ' :: Player disconnected the Voice Channel :: ',
-        voiceChannelId
-      )
-      const channel = client.channels.cache.get(player.textChannelId)
-      if (!channel) return
+    .on("playerDisconnect", (player, voiceChannelId) => {
+      console.log(player.guildId, " :: Player disconnected the Voice Channel :: ", voiceChannelId);
+      const channel = client.channels.cache.get(player.textChannelId);
+      if (!channel) return;
       channel.send({
-        embeds: [
-          new EmbedBuilder().setColor('Purple').setDescription('Disconnected!')
-        ]
-      })
+        embeds: [new EmbedBuilder().setColor("Purple").setDescription("Disconnected!")],
+      });
     })
-    .on('playerMove', (player, oldVoiceChannelId, newVoiceChannelId) => {
+    .on("playerMove", (player, oldVoiceChannelId, newVoiceChannelId) => {
       console.log(
         player.guildId,
-        ' :: Player moved from Voice Channel :: ',
+        " :: Player moved from Voice Channel :: ",
         oldVoiceChannelId,
-        ' :: To ::',
+        " :: To ::",
         newVoiceChannelId
-      )
+      );
     })
-    .on('playerSocketClosed', (player, payload) => {
-      console.log(
-        player.guildId,
-        ' :: Player socket got closed from lavalink :: ',
-        payload
-      )
-    })
+    .on("playerSocketClosed", (player, payload) => {
+      console.log(player.guildId, " :: Player socket got closed from lavalink :: ", payload);
+    });
 
   /**
-     * Queue/Track Events
-     */
+   * Queue/Track Events
+   */
   client.lavalink
-    .on('trackStart', async (player, track) => {
+    .on("trackStart", async (player, track) => {
       // console.log(
       //   player.guildId,
       //   " :: Started Playing :: ",
@@ -72,72 +60,60 @@ module.exports = async function (client) {
       //   "QUEUE:",
       //   player.queue.tracks.map((v) => v.info.title)
       // );
-      const channel = client.channels.cache.get(player.textChannelId)
-      if (!channel) return
+      const channel = client.channels.cache.get(player.textChannelId);
+      if (!channel) return;
 
       if (songMsg[channel.id]) {
-        const oldMsg = await channel.messages.fetch(songMsg[channel.id])
-        await oldMsg.delete()
+        const oldMsg = await channel.messages.fetch(songMsg[channel.id]);
+        await oldMsg.delete();
       }
-      songMsg = {}
+      songMsg = {};
 
       const msg = await channel?.send({
         embeds: [
           new EmbedBuilder()
-            .setColor('Purple')
-            .setTitle('🎶 Now playing')
+            .setColor("Purple")
+            .setTitle("🎶 Now playing")
             .setDescription(
-              track.info.sourceName === 'youtube' ? `[**${track.info.title}**](${track.info.uri}) - \`[${formatMSHHMMSS(track.info.duration)}]\`` : `[**${track.info.author} - ${track.info.title}**](${track.info.uri}) - \`[${formatMSHHMMSS(track.info.duration)}]\``
+              track.info.sourceName === "youtube"
+                ? `[**${track.info.title}**](${track.info.uri}) - \`[${formatMSHHMMSS(track.info.duration)}]\``
+                : `[**${track.info.author} - ${track.info.title}**](${track.info.uri}) - \`[${formatMSHHMMSS(
+                    track.info.duration
+                  )}]\``
             )
             .setThumbnail(
-              track.info.sourceName === 'spotify' ? track.info.artworkUrl.replace('ab67616d0000b273', 'ab67616d00004851') : track.info.sourceName === 'soundcloud' ? track.info.artworkUrl.replace('-original', '-t60x60') : (track.info.artworkUrl || track.pluginInfo?.artistArtworkUrl || null)
-            )
-        ]
-      })
-      songMsg[channel.id] = msg.id
+              track.info.sourceName === "spotify"
+                ? track.info.artworkUrl.replace("ab67616d0000b273", "ab67616d00004851")
+                : track.info.sourceName === "soundcloud"
+                ? track.info.artworkUrl.replace("-original", "-t60x60")
+                : track.info.artworkUrl || track.pluginInfo?.artistArtworkUrl || null
+            ),
+        ],
+      });
+      songMsg[channel.id] = msg.id;
     })
-    .on('trackEnd', (player, track, payload) => {
-      console.log(player.guildId, ' :: Finished Playing :: ', track.info.title)
+    .on("trackEnd", (player, track, payload) => {
+      console.log(player.guildId, " :: Finished Playing :: ", track.info.title);
     })
-    .on('trackError', (player, track, payload) => {
-      console.log(
-        player.guildId,
-        ' :: Errored while Playing :: ',
-        track.info.title,
-        ' :: ERROR DATA :: ',
-        payload
-      )
+    .on("trackError", (player, track, payload) => {
+      console.log(player.guildId, " :: Errored while Playing :: ", track.info.title, " :: ERROR DATA :: ", payload);
     })
-    .on('trackStuck', (player, track, payload) => {
-      console.log(
-        player.guildId,
-        ' :: Got Stuck while Playing :: ',
-        track.info.title,
-        ' :: STUCKED DATA :: ',
-        payload
-      )
+    .on("trackStuck", (player, track, payload) => {
+      console.log(player.guildId, " :: Got Stuck while Playing :: ", track.info.title, " :: STUCKED DATA :: ", payload);
     })
-    .on('queueEnd', (player, track, payload) => {
-      console.log(
-        player.guildId,
-        ' :: No more tracks in the queue, after playing :: ',
-        track.info.title
-      )
-      const channel = client.channels.cache.get(player.textChannelId)
-      if (!channel) return
+    .on("queueEnd", (player, track, payload) => {
+      console.log(player.guildId, " :: No more tracks in the queue, after playing :: ", track.info.title);
+      const channel = client.channels.cache.get(player.textChannelId);
+      if (!channel) return;
 
       channel.send({
-        embeds: [
-          new EmbedBuilder()
-            .setColor('Purple')
-            .setDescription(':ballot_box_with_check: The queue has ended!')
-        ]
-      })
+        embeds: [new EmbedBuilder().setColor("Purple").setDescription(":ballot_box_with_check: The queue has ended!")],
+      });
     })
-    .on('playerUpdate', (player) => {
+    .on("playerUpdate", (player) => {
       // use this event to udpate the player in the your cache if you want to save the player's data(s) externally!
       /**
-             *
-             */
-    })
-}
+       *
+       */
+    });
+};

@@ -1,16 +1,16 @@
-const { Client, GatewayIntentBits } = require('discord.js')
-const { LavalinkManager } = require('lavalink-client')
-const handleLavalinkEvents = require('./lavalink/lavalink')
-require('dotenv').config()
+const { Client, GatewayIntentBits } = require("discord.js");
+const { LavalinkManager } = require("lavalink-client");
+const handleLavalinkEvents = require("./lavalink/lavalink");
+require("dotenv").config();
 
 const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
     GatewayIntentBits.GuildMessages,
     GatewayIntentBits.GuildVoiceStates,
-    GatewayIntentBits.MessageContent
-  ]
-})
+    GatewayIntentBits.MessageContent,
+  ],
+});
 
 client.lavalink = new LavalinkManager({
   nodes: [
@@ -19,36 +19,35 @@ client.lavalink = new LavalinkManager({
       host: process.env.LAVALINK_NAME,
       port: parseInt(process.env.LAVALINK_PORT),
       id: process.env.LAVALINK_ID,
-      secure: Boolean(process.env.LAVALINK_SECURE)
-    }
+      secure: Boolean(process.env.LAVALINK_SECURE),
+    },
   ],
-  sendToShard: (guildId, payload) =>
-    client.guilds.cache.get(guildId)?.shard?.send(payload),
+  sendToShard: (guildId, payload) => client.guilds.cache.get(guildId)?.shard?.send(payload),
   client: {
     id: process.env.CLIENT_ID,
-    username: client.username
+    username: client.username,
   },
   autoSkip: true,
   playerOptions: {
     clientBasedPositionUpdateInterval: 50,
-    defaultSearchPlatform: 'ytsearch',
+    defaultSearchPlatform: "ytsearch",
     // requesterTransformer: requesterTransformer,
     onDisconnect: {
       autoReconnect: false,
-      destroyPlayer: true
+      destroyPlayer: true,
     },
     onEmptyQueue: {
-      destroyAfterMs: 600_000
-    }
+      destroyAfterMs: 600_000,
+    },
   },
   queueOptions: {
-    maxPreviousTracks: 10
-  }
-})
+    maxPreviousTracks: 10,
+  },
+});
 
-handleLavalinkEvents(client)
+handleLavalinkEvents(client);
 
-client.prefix = process.env.PREFIX
-client.login(process.env.TOKEN)
+client.prefix = process.env.PREFIX;
+client.login(process.env.TOKEN);
 
-module.exports = client
+module.exports = client;
